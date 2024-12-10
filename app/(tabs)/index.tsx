@@ -91,13 +91,12 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   passwordInput: {
-    paddingRight: 60, // Space for the "Show" button
+    paddingRight: 60,
   },
   toggleButton: {
     position: "absolute",
     right: 10,
-    top: "50%",
-    transform: "translateY(-50%)",
+    top: 8,
     padding: 4,
   },
 });

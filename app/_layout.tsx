@@ -61,10 +61,14 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
   if (currentDbVersion === 0) {
     await db.execAsync(`
       PRAGMA journal_mode = 'wal';
-      CREATE TABLE streak (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, start_date INTEGER);
+      CREATE TABLE IF NOT EXISTS streak (
+        id INTEGER PRIMARY KEY NOT NULL,
+        title TEXT NOT NULL,
+        start_date INTEGER
+      );
     `);
     await db.runAsync(
-      "INSERT INTO todos (title, start_date) VALUES (?, ?)",
+      "INSERT INTO streak (title, start_date) VALUES (?, ?)",
       "My first streak!",
       currentDate.getTime()
     );
