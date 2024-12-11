@@ -49,7 +49,7 @@ export default function RootLayout() {
 }
 
 async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 1;
+  const DATABASE_VERSION = 2;
   const result = await db.getFirstAsync<{
     user_version: number;
   }>("PRAGMA user_version");
@@ -74,8 +74,12 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
     );
     currentDbVersion = 1;
   }
-  // if (currentDbVersion === 1) {
-  //   Add more migrations
-  // }
+  if (currentDbVersion === 1) {
+    await db.execAsync(`
+      ALTER TABLE streak ADD COLUMN current_streak_date INTEGER;
+      ALTER TABLE streak ADD COLUMN status TEXT DEFAULT 'active';
+    `);
+    currentDbVersion = 2;
+  }
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }

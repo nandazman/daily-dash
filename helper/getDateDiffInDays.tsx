@@ -1,4 +1,4 @@
-export const getDateDiffInDays = (prevDateInMilliSeconds: number) => {
+const getDateDiffInDays = (prevDateInMilliSeconds: number) => {
     const currentDate = new Date();
     const differenceInMillis = currentDate.getTime() - prevDateInMilliSeconds;
     const differenceInDays = Math.floor(differenceInMillis / (1000 * 60 * 60 * 24));
@@ -6,3 +6,4 @@ export const getDateDiffInDays = (prevDateInMilliSeconds: number) => {
     return differenceInDays
 }
     
+export default getDateDiffInDays
