@@ -67,11 +67,6 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
         start_date INTEGER
       );
     `);
-    await db.runAsync(
-      "INSERT INTO streak (title, start_date) VALUES (?, ?)",
-      "My first streak!",
-      currentDate.getTime()
-    );
     currentDbVersion = 1;
   }
   if (currentDbVersion === 1) {
@@ -79,6 +74,13 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
       ALTER TABLE streak ADD COLUMN current_streak_date INTEGER;
       ALTER TABLE streak ADD COLUMN status TEXT DEFAULT 'active';
     `);
+
+    await db.runAsync(
+      "INSERT INTO streak (title, start_date) VALUES (?, ?)",
+      "My first streak!",
+      currentDate.getTime(),
+      currentDate.getTime()
+    );
     currentDbVersion = 2;
   }
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);

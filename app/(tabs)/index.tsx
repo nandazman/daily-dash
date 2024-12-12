@@ -1,33 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, Modal, TextInput, Button, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, Modal, TextInput, Button, ActivityIndicator, ScrollView } from 'react-native';
 import { useSQLiteContext } from 'expo-sqlite';
 import { FAB, Provider as PaperProvider, IconButton } from "react-native-paper";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import getDateDiffInDays from '@/helper/getDateDiffInDays';
+import { Streak } from '../type/streak';
+import { useFocusEffect } from 'expo-router';
+import { HelloWave } from '@/components/HelloWave';
 
-interface Streak {
-  id: number;
-  title: string;
-  start_date: number;
-  current_streak_date: number;
-  status: string;
-}
-
-export default function TabTwoScreen() {
+export default function Home() {
   const db = useSQLiteContext();
   const [streaks, setStreaks] = useState<Streak[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalFailed, setModalFailed] = useState(false);
   const [streakName, setStreakName] = useState("");
   const [loading, setLoading] = useState(false);
 
   const checkStreakStatus = (streaks: Streak[]) => {
-    const today = new Date().getTime();
-
-    // Check if any streak has been missed for 2 days or more
-    return streaks.map((streak) => {
-      const diffInDays = getDateDiffInDays(streak.current_streak_date)
+    const updatedStreak = []
+    for (let i = 0; i < streaks.length; i++) {
+      const streak = streaks[i];
+      const diffInDays = getDateDiffInDays({ startDate: streak.current_streak_date })
       if (diffInDays >= 2) {
-        // Update streak status to 'fail' if more than 2 days have passed without check-in
         db.runAsync(
           'UPDATE streak SET status = ? WHERE id = ?',
           'fail',
@@ -35,19 +29,34 @@ export default function TabTwoScreen() {
         );
         streak.status = 'fail'
       }
-
-      return streak
-    });
+      updatedStreak.push(streak)
+    }
+    return updatedStreak
   }
 
-  useEffect(() => {
-    async function setup() {
-      const result = await db.getAllAsync<Streak>('SELECT * FROM streak WHERE status != "stopped"');
-      const checkedStatus = checkStreakStatus(result)
-      setStreaks(checkedStatus);
-    }
-    setup();
-  }, [db]);
+  const handleAcknowledgeFailedStreaks = async () => {
+    setModalFailed(false);
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      async function setup() {
+        const result = await db.getAllAsync<Streak>('SELECT * FROM streak WHERE status = "active"')
+        const updatedStreak = checkStreakStatus(result)
+        setStreaks(updatedStreak);
+  
+        if (updatedStreak.some((item) => item.status === 'fail')) {
+          setModalFailed(true)
+        }
+      }
+      setup();
+      return () => {
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+      };
+    }, [db])
+  );
+
 
   const handleSave = async () => {
     if (streakName.trim() === "") {
@@ -64,7 +73,7 @@ export default function TabTwoScreen() {
         "active"
       );
       setModalVisible(false);
-      const result = await db.getAllAsync<Streak>('SELECT * FROM streak');
+      const result = await db.getAllAsync<Streak>('SELECT * FROM streak WHERE status = "active"');
       setStreaks(result);
       setStreakName("");
       setLoading(false);
@@ -86,13 +95,13 @@ export default function TabTwoScreen() {
       streakId
     );
 
-    const result = await db.getAllAsync<Streak>('SELECT * FROM streak');
+    const result = await db.getAllAsync<Streak>('SELECT * FROM streak WHERE status = "active"');
     setStreaks(result);
   };
 
   const handleDelete = async (streakId: number) => {
     await db.runAsync(
-      'UPDATE streak SET status = "stopped" WHERE id = ?',
+      'UPDATE streak SET status = "fail" WHERE id = ?',
       streakId
     );
 
@@ -103,19 +112,20 @@ export default function TabTwoScreen() {
   return (
     <PaperProvider>
       <View style={styles.container}>
-        <Text style={styles.title}>How does your streak go?</Text>
+        <Text style={styles.title}>How does your streak go? <HelloWave /></Text>
         {streaks.length === 0 ? (
           <Text>No streaks found</Text>
         ) : (
           <View>
             {streaks.map((streak) => {
-              const isAlreadyUpdate = getDateDiffInDays(streak.current_streak_date) === 0
+              const daysDiff = getDateDiffInDays({ startDate: streak.start_date, endDate: streak.current_streak_date})
+              const isAlreadyUpdate = getDateDiffInDays({ startDate: streak.current_streak_date }) < 1
               const isActive = streak.status === 'active'
               return <View style={styles.streakItemContainer} key={streak.id}>
               <Text style={{ paddingLeft: 8 }}>{streak.title}</Text>
               <View style={{  flexDirection: 'row', alignItems: "center", justifyContent: 'flex-end', columnGap: 4 }}>
                 <Text style={{textAlign: "right", marginRight: 4 }} >
-                  {isActive ? getDateDiffInDays(streak.start_date) : 'FAIL'}
+                  {isActive ? daysDiff.toString() : 'FAIL'}
                 </Text>
                 
                 <IconButton
@@ -123,18 +133,18 @@ export default function TabTwoScreen() {
                     <MaterialCommunityIcons
                       name="plus-circle"
                       size={24}
-                      color={isAlreadyUpdate || isActive ? '#888' : '#4CAF50'}
+                      color={isAlreadyUpdate || !isActive ? '#888' : '#4CAF50'}
                     />
                   )}
                   onPress={() => handleCheckIn(streak.id, streak.current_streak_date)}
-                  disabled={isAlreadyUpdate}
+                  disabled={isAlreadyUpdate || !isActive}
                   style={{ margin: 0, padding: 0, width: 24, height: 24 }}
                   size={24}
                 />
                 <IconButton
                       icon={() => (
                         <MaterialCommunityIcons
-                          name="delete"
+                          name="stop-circle"
                           size={24}
                           color="#f28585"
                         />
@@ -157,6 +167,35 @@ export default function TabTwoScreen() {
         icon="plus"
         onPress={() => setModalVisible(true)}
       />
+
+<Modal
+          visible={modalFailed}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => setModalFailed(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>😢 Failed Streaks</Text>
+              <ScrollView contentContainerStyle={{ paddingBottom: 0 }}>
+      {streaks
+        // .filter((item) => item.status === 'fail')
+        .map((item, index) => (
+          <View key={item.id?.toString()} style={{ marginBottom: 8 }}>
+            <Text style={{ fontSize: 16 }}>{index + 1}. {item.title}</Text>
+          </View>
+        ))}
+    </ScrollView>
+              <Text style={{ fontSize: 14, marginBottom: 16 }}>
+                The above streaks have been inactive for more than 2 days. They will be removed from active streaks and added to the history page.
+              </Text>
+              <Button
+                title="Acknowledge"
+                onPress={handleAcknowledgeFailedStreaks}
+              />
+            </View>
+          </View>
+        </Modal>
 
       <Modal
         visible={modalVisible}
