@@ -1,4 +1,3 @@
-import { Streak } from '@/app/type/streak';
 import getDateDiffInDays from '@/helper/getDateDiffInDays';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFocusEffect } from 'expo-router';
@@ -6,6 +5,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, StatusBar } from 'react-native';
 import { IconButton } from 'react-native-paper';
+import Streak from '../../../type/streak';
 
 export default function TabTwoScreen() {
   const db = useSQLiteContext();
@@ -38,18 +38,21 @@ export default function TabTwoScreen() {
   return (
 
       <View style={styles.container}>
-        <Text style={styles.title}>Your fail streak :(</Text>
+        <Text style={styles.title}>Your history streak!</Text>
           {streaks.length === 0 ? (
-          <Text>No streaks found</Text>
+          <Text style={{ paddingHorizontal: 16}}>No streaks found</Text>
         ) : (
           <View>
-            {streaks.map((streak) => {
+            {streaks.map((streak, index) => {
               const daysDiff = getDateDiffInDays({ startDate: streak.start_date, endDate: streak.current_streak_date})
-              return <View style={styles.streakItemContainer} key={streak.id}>
+              return <View style={{
+                ...styles.streakItemContainer,
+                paddingTop: index === 0 ? 0 : undefined
+              }} key={streak.id}>
               <Text style={{ paddingLeft: 8 }}>{streak.title}</Text>
               <View style={{  flexDirection: 'row', alignItems: "center", justifyContent: 'flex-end', columnGap: 4 }}>
                 <Text style={{textAlign: "right", marginRight: 4 }} >
-                  {daysDiff.toString()}
+                  {`${daysDiff.toString()}`}
                 </Text>
                 <IconButton
                   icon={() => (
@@ -110,7 +113,7 @@ const styles = StyleSheet.create({
     marginBottom: 16
   },
   container: {
-    paddingTop: StatusBar.currentHeight,
+    paddingTop: 16,
     backgroundColor: "#fff",
     height: "100%"
   },

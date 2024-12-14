@@ -4,9 +4,9 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { FAB, Provider as PaperProvider, IconButton } from "react-native-paper";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import getDateDiffInDays from '@/helper/getDateDiffInDays';
-import { Streak } from '../type/streak';
 import { useFocusEffect } from 'expo-router';
 import { HelloWave } from '@/components/HelloWave';
+import Streak from '../../type/streak';
 
 export default function Home() {
   const db = useSQLiteContext();
@@ -114,7 +114,7 @@ export default function Home() {
       <View style={styles.container}>
         <Text style={styles.title}>How does your streak go? <HelloWave /></Text>
         {streaks.length === 0 ? (
-          <Text>No streaks found</Text>
+          <Text style={{ paddingHorizontal: 16}}>No streaks found</Text>
         ) : (
           <View>
             {streaks.map((streak) => {
@@ -158,7 +158,7 @@ export default function Home() {
             </View>
             })}
           </View>
-        )}?
+        )}
       </View>
 
       <FAB
@@ -168,7 +168,7 @@ export default function Home() {
         onPress={() => setModalVisible(true)}
       />
 
-<Modal
+    <Modal
           visible={modalFailed}
           transparent={true}
           animationType="slide"
@@ -179,10 +179,9 @@ export default function Home() {
               <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>😢 Failed Streaks</Text>
               <ScrollView contentContainerStyle={{ paddingBottom: 0 }}>
       {streaks
-        // .filter((item) => item.status === 'fail')
         .map((item, index) => (
           <View key={item.id?.toString()} style={{ marginBottom: 8 }}>
-            <Text style={{ fontSize: 16 }}>{index + 1}. {item.title}</Text>
+            <Text style={{ fontSize: 16 }}>{`${index + 1}`}. {item.title}</Text>
           </View>
         ))}
     </ScrollView>
@@ -247,7 +246,7 @@ const styles = StyleSheet.create({
     marginBottom: 16
   },
   container: {
-    paddingTop: StatusBar.currentHeight,
+    paddingTop: 16,
     backgroundColor: "#fff",
     height: "100%"
   },

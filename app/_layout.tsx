@@ -38,8 +38,10 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <SQLiteProvider databaseName="streak.db" onInit={migrateDbIfNeeded}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack >
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(streak)" />
+        <Stack.Screen name="(check-in)" />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
