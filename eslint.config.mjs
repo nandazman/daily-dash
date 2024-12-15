@@ -27,7 +27,8 @@ export default [
 			'react/react-in-jsx-scope': 'off',
 			'react/no-unescaped-entities': 'off',
 			'@typescript-eslint/no-require-imports': 'off',
-			'indent': ['warn', 'tab'], // Enforce tab-based indentation
+			'indent': ['warn', 'tab'],
+			'@typescript-eslint/no-unused-vars': ['off', { argsIgnorePattern: '^_' }]
 		},
 	},
 ];

@@ -2,17 +2,17 @@ import {
 	DarkTheme,
 	DefaultTheme,
 	ThemeProvider,
-} from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { SQLiteProvider, type SQLiteDatabase } from 'expo-sqlite';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+} from "@react-navigation/native";
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { SQLiteProvider, type SQLiteDatabase } from "expo-sqlite";
+import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+import "react-native-reanimated";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { PaperProvider } from 'react-native-paper';
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { PaperProvider } from "react-native-paper";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -20,7 +20,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
 	const colorScheme = useColorScheme();
 	const [loaded] = useFonts({
-		SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+		SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
 	});
 
 	useEffect(() => {
@@ -34,7 +34,7 @@ export default function RootLayout() {
 	}
 
 	return (
-		<ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+		<ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
 			<SQLiteProvider databaseName="streak.db" onInit={migrateDbIfNeeded}>
 				<PaperProvider>
 					<Stack>
@@ -53,8 +53,8 @@ export default function RootLayout() {
 async function migrateDbIfNeeded(db: SQLiteDatabase) {
 	const DATABASE_VERSION = 2;
 	const result = await db.getFirstAsync<{
-    user_version: number;
-  }>('PRAGMA user_version');
+		user_version: number;
+	}>("PRAGMA user_version");
 	const currentDate = new Date();
 	let { user_version: currentDbVersion } = result || { user_version: 1 };
 	if (currentDbVersion >= DATABASE_VERSION) {
@@ -78,12 +78,37 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
     `);
 
 		await db.runAsync(
-			'INSERT INTO streak (title, start_date) VALUES (?, ?)',
-			'My first streak!',
+			"INSERT INTO streak (title, start_date) VALUES (?, ?)",
+			"My first streak!",
 			currentDate.getTime(),
-			currentDate.getTime()
+			currentDate.getTime(),
 		);
 		currentDbVersion = 2;
+	}
+
+	if (currentDbVersion === 2) {
+		await db.execAsync(`
+			CREATE TABLE IF NOT EXISTS streak_history (
+				id INTEGER PRIMARY KEY NOT NULL,
+				streak_id INTEGER NOT NULL,
+				action_date INTEGER NOT NULL,
+				action_type TEXT NOT NULL,
+				note TEXT,
+				FOREIGN KEY (streak_id) REFERENCES streak(id) ON DELETE CASCADE
+			);
+		`);
+
+		await db.execAsync(`
+			CREATE TABLE IF NOT EXISTS streak_photos (
+			id INTEGER PRIMARY KEY NOT NULL,
+			streak_id INTEGER NOT NULL,
+			milestone INTEGER NOT NULL,
+			photo_url TEXT NOT NULL,
+			added_date INTEGER NOT NULL,
+			FOREIGN KEY (streak_id) REFERENCES streak(id) ON DELETE CASCADE
+			);
+		`);
+		currentDbVersion = 3;
 	}
 	await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }

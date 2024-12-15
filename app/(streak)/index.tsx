@@ -1,16 +1,19 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { useSQLiteContext } from 'expo-sqlite';
-import { FAB, IconButton } from 'react-native-paper';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import getDateDiffInDays from '@/helper/getDateDiffInDays';
-import { useFocusEffect } from 'expo-router';
-import { HelloWave } from '@/components/HelloWave';
-import Streak from '../../type/streak';
-import ModalFailedStreak from './components/ModalFailedStreak';
-import ModalAddStreak from './components/ModalAddStreak';
-import ConfirmationModal from '@/components/ui/Modal/ConfirmationModal';
-import checkStreakStatus from './helper/checkStreakStatus';
+import React, { useRef, useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { useSQLiteContext } from "expo-sqlite";
+import { FAB, IconButton } from "react-native-paper";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import getDateDiffInDays from "@/helper/getDateDiffInDays";
+import { useFocusEffect } from "expo-router";
+import { HelloWave } from "@/components/HelloWave";
+import Streak from "../../type/streak";
+import ModalFailedStreak from "./components/ModalFailedStreak";
+import ModalAddStreak from "./components/ModalAddStreak";
+import checkStreakStatus from "./helper/checkStreakStatus";
+import insertStreakHistory from "./sql/insertStreakHistory";
+import sqlTransaction from "@/helper/sqlTransaction";
+import updateStreakFail from "./sql/updateStreakFail";
+import ModalStopStreak from "./components/ModalStopStreak";
 
 export default function Home() {
 	const db = useSQLiteContext();
@@ -22,17 +25,30 @@ export default function Home() {
 
 	const fetchStreak = async () => {
 		const streaks = await db.getAllAsync<Streak>(
-			'SELECT * FROM streak WHERE status = "active"'
+			'SELECT * FROM streak WHERE status = "active"',
 		);
-		const updatedStreak = checkStreakStatus({
+		const updatedStreak = await checkStreakStatus({
 			streaks,
-			onUpdateStatus(id) {
-				db.runAsync('UPDATE streak SET status = ? WHERE id = ?', 'fail', id);
+			async onUpdateStatus(id) {
+				sqlTransaction({
+					db,
+					async transaction() {
+						await updateStreakFail({ db, id });
+
+						await insertStreakHistory({
+							db,
+							payload: {
+								action_type: "fail",
+								streak_id: id,
+							},
+						});
+					},
+				});
 			},
 		});
 		setStreaks(updatedStreak);
 
-		if (updatedStreak.some((item) => item.status === 'fail')) {
+		if (updatedStreak.some((item) => item.status === "fail")) {
 			setModalFailed(true);
 		}
 	};
@@ -44,7 +60,7 @@ export default function Home() {
 				// Do something when the screen is unfocused
 				// Useful for cleanup functions
 			};
-		}, [db])
+		}, [db]),
 	);
 
 	const handleCheckIn = async (streakId: number, currentStreakDate: number) => {
@@ -53,26 +69,26 @@ export default function Home() {
 		if (currentStreakDate === today) return;
 
 		await db.runAsync(
-			'UPDATE streak SET current_streak_date = ? WHERE id = ?',
+			"UPDATE streak SET current_streak_date = ? WHERE id = ?",
 			today,
-			streakId
+			streakId,
 		);
 
 		const result = await db.getAllAsync<Streak>(
-			'SELECT * FROM streak WHERE status = "active"'
+			'SELECT * FROM streak WHERE status = "active"',
 		);
 		setStreaks(result);
 	};
 
-	const handleDelete = async () => {
+	const handleDelete = async (note: string) => {
 		const streakId = selectedStreakId.current;
-		await db.runAsync(
-			'UPDATE streak SET status = "fail" WHERE id = ?',
-			streakId
-		);
+		const query = note
+			? 'UPDATE streak SET status = "fail", note = ? WHERE id = ?'
+			: 'UPDATE streak SET status = "fail" WHERE id = ?';
+		await db.runAsync(query, streakId);
 
 		setStreaks((prevStreaks) =>
-			prevStreaks.filter((streak) => streak.id !== streakId)
+			prevStreaks.filter((streak) => streak.id !== streakId),
 		);
 		setModalConfirmation(false);
 	};
@@ -81,7 +97,7 @@ export default function Home() {
 		<>
 			<View style={styles.container}>
 				<Text style={styles.title}>
-          How does your streak go? <HelloWave />
+					How does your streak go? <HelloWave />
 				</Text>
 				{streaks.length === 0 ? (
 					<Text style={{ paddingHorizontal: 16 }}>No streaks found</Text>
@@ -93,9 +109,9 @@ export default function Home() {
 								endDate: streak.current_streak_date,
 							});
 							const isAlreadyUpdate =
-                getDateDiffInDays({ startDate: streak.current_streak_date }) <
-                1;
-							const isActive = streak.status === 'active';
+								getDateDiffInDays({ startDate: streak.current_streak_date }) <
+								1;
+							const isActive = streak.status === "active";
 							return (
 								<View
 									style={{
@@ -107,14 +123,14 @@ export default function Home() {
 									<Text style={{ paddingLeft: 8 }}>{streak.title}</Text>
 									<View
 										style={{
-											flexDirection: 'row',
-											alignItems: 'center',
-											justifyContent: 'flex-end',
+											flexDirection: "row",
+											alignItems: "center",
+											justifyContent: "flex-end",
 											columnGap: 4,
 										}}
 									>
-										<Text style={{ textAlign: 'right', marginRight: 4 }}>
-											{isActive ? daysDiff.toString() : 'FAIL'}
+										<Text style={{ textAlign: "right", marginRight: 4 }}>
+											{isActive ? daysDiff.toString() : "FAIL"}
 										</Text>
 										<Text>
 											<IconButton
@@ -123,7 +139,7 @@ export default function Home() {
 														name="plus-circle"
 														size={24}
 														color={
-															isAlreadyUpdate || !isActive ? '#888' : '#4CAF50'
+															isAlreadyUpdate || !isActive ? "#888" : "#4CAF50"
 														}
 													/>
 												)}
@@ -182,14 +198,12 @@ export default function Home() {
 					setModalVisible(false);
 				}}
 			/>
-			<ConfirmationModal
+			<ModalStopStreak
 				visible={modalConfirmation}
-				description="Stop streak ? It will be moved to your history"
 				onClose={() => setModalConfirmation(false)}
-				onConfirm={() => {
-					handleDelete();
+				onConfirm={(note: string) => {
+					handleDelete(note);
 				}}
-				confirmText="Remove!"
 			/>
 		</>
 	);
@@ -200,31 +214,31 @@ const styles = StyleSheet.create({
 		fontSize: 24,
 		paddingHorizontal: 16,
 		borderBottomWidth: 1,
-		borderBottomColor: '#ccc',
+		borderBottomColor: "#ccc",
 		paddingBottom: 4,
 		marginBottom: 16,
 	},
 	container: {
 		paddingTop: 16,
-		backgroundColor: '#fff',
-		height: '100%',
+		backgroundColor: "#fff",
+		height: "100%",
 	},
 	fab: {
-		position: 'absolute',
-		left: '50%',
+		position: "absolute",
+		left: "50%",
 		transform: [{ translateX: -28 }],
 		bottom: 16,
-		backgroundColor: '#fff',
+		backgroundColor: "#fff",
 		borderRadius: 50,
 		padding: 4,
 	},
 	streakItemContainer: {
 		borderBottomWidth: 1,
-		borderBottomColor: '#ccc',
+		borderBottomColor: "#ccc",
 		marginBottom: 10,
-		justifyContent: 'space-between',
-		flexDirection: 'row',
-		alignItems: 'center',
+		justifyContent: "space-between",
+		flexDirection: "row",
+		alignItems: "center",
 		padding: 8,
 	},
 });

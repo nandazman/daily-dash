@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ComponentProps } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import ModalWrapper from './ModalWrapper';
 
@@ -8,6 +8,7 @@ type ConfirmModalProps = {
   onClose: () => void;
   onConfirm: () => void;
   confirmText?: string;
+  children?: ComponentProps<"div">['children']
 };
 
 export default function ConfirmationModal({
@@ -15,12 +16,14 @@ export default function ConfirmationModal({
 	description,
 	onClose,
 	onConfirm,
-	confirmText = 'Confirm',
+	confirmText = "Confirm",
+	children,
 }: ConfirmModalProps) {
 	return (
 		<ModalWrapper visible={visible} onClose={onClose}>
 			<View style={styles.container}>
 				<Text style={styles.description}>{description}</Text>
+				{children}
 				<View style={styles.buttonContainer}>
 					<View style={styles.button}>
 						<Button title="Cancel" onPress={onClose} color="#757575" />
