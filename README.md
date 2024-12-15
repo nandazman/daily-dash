@@ -1,50 +1,19 @@
-# Welcome to your Expo app 👋
+# Streak Tracker
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Streak Tracker is a simple app that helps users track their daily progress on any activity by recording streaks. Whether it's for exercising daily, reading, or any other habit, this app allows you to easily track your consistency and progress over time.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **Add Streaks**: Users can create and manage streaks for any activity.
+- **Manual Updates**: Users update their streak manually each day to track their progress.
+- **Streak Progress**: Track how many consecutive days you've achieved your goal.
+  
+## Example Use Case
 
-   ```bash
-   npm install
-   ```
+For example, if you want to exercise daily, you can create a streak for exercise and manually update it each day to track your consecutive days of exercising.
 
-2. Start the app
+## How It Works
 
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+1. **Create a Streak**: Add a new streak for any activity (e.g., "Exercise", "Read a Book").
+2. **Update Streak**: Each day, manually update your streak to reflect your progress (e.g., if you exercised today, increase your streak by 1).
+3. **Track Progress**: See how many consecutive days you've maintained your streak.

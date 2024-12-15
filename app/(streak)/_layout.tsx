@@ -9,42 +9,42 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const navigation = useNavigation();
+	const colorScheme = useColorScheme();
+	const navigation = useNavigation();
 
-  useEffect(() => {
-    navigation.setOptions({ title: 'Streak' });
-  }, [navigation]);
+	useEffect(() => {
+		navigation.setOptions({ title: 'Streak' });
+	}, [navigation]);
   
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}
-    >
-      <Tabs.Screen
-        name="index" // This is for the Home screen
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="history/index"  // Correct path to the history screen
-        options={{
-          title: 'History',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="history" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
+	return (
+		<Tabs
+			screenOptions={{
+				tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+				headerShown: false,
+				tabBarButton: HapticTab,
+				tabBarBackground: TabBarBackground,
+				tabBarStyle: Platform.select({
+					ios: {
+						position: 'absolute',
+					},
+					default: {},
+				}),
+			}}
+		>
+			<Tabs.Screen
+				name="index" // This is for the Home screen
+				options={{
+					title: 'Home',
+					tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+				}}
+			/>
+			<Tabs.Screen
+				name="history/index"  // Correct path to the history screen
+				options={{
+					title: 'History',
+					tabBarIcon: ({ color }) => <IconSymbol size={28} name="history" color={color} />,
+				}}
+			/>
+		</Tabs>
+	);
 }
