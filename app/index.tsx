@@ -1,7 +1,7 @@
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
-import React from 'react';
-import { View, Text, Image, StyleSheet, StatusBar } from 'react-native';
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { Link } from "expo-router";
+import React from "react";
+import { View, Text, StyleSheet, StatusBar } from "react-native";
 
 export default function StreakLayout() {
   return (
@@ -9,22 +9,26 @@ export default function StreakLayout() {
       <View style={styles.topSection}>
         {/* Streak Section */}
         <Link href="/(streak)">
-            <View style={styles.section}>
+          <View style={styles.section}>
             <View style={styles.logoContainer}>
-            <MaterialIcons name="whatshot" size={32} color="black" />
+              <MaterialIcons name="whatshot" size={32} color="black" />
             </View>
             <Text style={styles.label}>Streak</Text>
-            </View>
+          </View>
         </Link>
 
         {/* Clock-In Section */}
         <Link href="/(check-in)">
-            <View style={styles.section}>
+          <View style={styles.section}>
             <View style={styles.logoContainer}>
-            <MaterialCommunityIcons name="calendar-today" size={24} color="black" />
+              <MaterialCommunityIcons
+                name="calendar-today"
+                size={24}
+                color="black"
+              />
             </View>
             <Text style={styles.label}>Clock-In</Text>
-            </View>
+          </View>
         </Link>
       </View>
     </View>
@@ -34,37 +38,38 @@ export default function StreakLayout() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 20,
     paddingTop: StatusBar.currentHeight,
   },
   topSection: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'flex-start',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "flex-start",
+    width: "100%",
     paddingTop: 20,
   },
   section: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   logoContainer: {
     width: 80,
     height: 80,
-    borderWidth: 1,
-    borderColor: '#000',
     borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 8,
-  },
-  logo: {
-    width: 60,
-    height: 60,
+    backgroundColor: "#fff", // Light background color to resemble a button
+    // Box shadow for 3D effect
+    shadowColor: "#000", // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Shadow direction
+    shadowOpacity: 0.25, // Shadow intensity
+    shadowRadius: 3.5, // Shadow blur radius
+    elevation: 5, // For Android devices to support shadow
   },
   label: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#000',
+    fontWeight: "500",
+    color: "#000",
   },
 });

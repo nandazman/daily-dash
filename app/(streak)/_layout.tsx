@@ -13,9 +13,9 @@ export default function TabLayout() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    navigation.setOptions({ title: "Streak" });
+    navigation.setOptions({ title: 'Streak' });
   }, [navigation]);
-
+  
   return (
     <Tabs
       screenOptions={{
