@@ -11,13 +11,14 @@ export default function ModalFailedStreak({
 	onClose: () => void;
 	streaks: Streak[];
 }) {
+	const failedStreak = streaks.filter((item) => item.status !== "active");
 	return (
 		<ModalWrapper visible={visible} onClose={onClose}>
 			<Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 8 }}>
-				😢 Failed Streaks
+				😢 {failedStreak.length} Failed Streaks
 			</Text>
 			<ScrollView contentContainerStyle={{ paddingBottom: 0 }}>
-				{streaks.map((item, index) => (
+				{failedStreak.map((item, index) => (
 					<View key={item.id?.toString()} style={{ marginBottom: 8 }}>
 						<Text style={{ fontSize: 16 }}>
 							{`${index + 1}`}. {item.title}

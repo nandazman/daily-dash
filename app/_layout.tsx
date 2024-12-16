@@ -51,7 +51,9 @@ export default function RootLayout() {
 }
 
 async function migrateDbIfNeeded(db: SQLiteDatabase) {
-	const DATABASE_VERSION = 2;
+	await db.execAsync(`PRAGMA foreign_keys = ON;`);
+	
+	const DATABASE_VERSION = 3;
 	const result = await db.getFirstAsync<{
 		user_version: number;
 	}>("PRAGMA user_version");

@@ -2,7 +2,7 @@ import ConfirmationModal from "@/components/ui/Modal/ConfirmationModal";
 import { useRef } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 
-export default function ModalStopStreak({
+export default function ModalRestartStreak({
 	visible,
 	onClose,
 	onConfirm,
@@ -25,10 +25,10 @@ export default function ModalStopStreak({
 	return (
 		<ConfirmationModal
 			visible={visible}
-			description="Stop streak ? It will be moved to your history"
+			description="Resume streak ?"
 			onClose={closeModal}
 			onConfirm={confirmStop}
-			confirmText="Stop!"
+			confirmText="Go!"
 		>
 			<View style={styles.inputContainer}>
 				<TextInput
