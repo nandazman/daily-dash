@@ -1,6 +1,6 @@
 import { StreakHistory } from "@/type/streakHistory";
 import { SQLiteDatabase } from "expo-sqlite";
-import getCurrentTime from "../helper/getCurrentTime";
+import getCurrentTime from "../../helper/streak/getCurrentTime";
 
 export default async function insertStreakHistory({
 	db,

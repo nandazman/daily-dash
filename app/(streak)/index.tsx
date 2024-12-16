@@ -7,13 +7,13 @@ import getDateDiffInDays from "@/helper/getDateDiffInDays";
 import { useFocusEffect } from "expo-router";
 import { HelloWave } from "@/components/HelloWave";
 import Streak from "../../type/streak";
-import ModalFailedStreak from "./components/ModalFailedStreak";
-import ModalAddStreak from "./components/ModalAddStreak";
-import checkStreakStatus from "./helper/checkStreakStatus";
-import insertStreakHistory from "./sql/insertStreakHistory";
+import ModalFailedStreak from "../../components/streak/ModalFailedStreak";
+import ModalAddStreak from "../../components/streak/ModalAddStreak";
+import checkStreakStatus from "../../helper/streak/checkStreakStatus";
+import insertStreakHistory from "../../sql/streak/insertStreakHistory";
 import sqlTransaction from "@/helper/sqlTransaction";
-import updateStreakFail from "./sql/updateStreakFail";
-import ModalStopStreak from "./components/ModalStopStreak";
+import updateStreakFail from "../../sql/streak/updateStreakFail";
+import ModalStopStreak from "../../components/streak/ModalStopStreak";
 
 export default function Home() {
 	const db = useSQLiteContext();
