@@ -1,18 +1,22 @@
-import React, { ComponentProps } from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
-import ModalWrapper from './ModalWrapper';
+import React, { ComponentProps } from "react";
+import { Text, View, StyleSheet, Button } from "react-native";
+import ModalWrapper from "./ModalWrapper";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedButton } from "@/components/ThemedButton";
 
 type ConfirmModalProps = {
-  visible: boolean;
-  description: string;
-  onClose: () => void;
-  onConfirm: () => void;
-  confirmText?: string;
-  children?: ComponentProps<"div">['children']
+	visible: boolean;
+	title: string;
+	onClose: () => void;
+	onConfirm: () => void;
+	confirmText?: string;
+	children?: ComponentProps<"div">["children"];
+	description?: string;
 };
 
 export default function ConfirmationModal({
 	visible,
+	title,
 	description,
 	onClose,
 	onConfirm,
@@ -20,16 +24,20 @@ export default function ConfirmationModal({
 	children,
 }: ConfirmModalProps) {
 	return (
-		<ModalWrapper visible={visible} onClose={onClose}>
-			<View style={styles.container}>
-				<Text style={styles.description}>{description}</Text>
+		<ModalWrapper visible={visible} title={title} onClose={onClose}>
+			<View>
+				<ThemedText style={{ marginBottom: 8 }}>{description}</ThemedText>
 				{children}
 				<View style={styles.buttonContainer}>
 					<View style={styles.button}>
-						<Button title="Cancel" onPress={onClose} color="#757575" />
+						<ThemedButton title="Cancel" type="transparent" onPress={onClose} />
 					</View>
 					<View style={styles.button}>
-						<Button title={confirmText} onPress={onConfirm} color="#4CAF50" />
+						<ThemedButton
+							title={confirmText}
+							onPress={onConfirm}
+							type="confirmation"
+						/>
 					</View>
 				</View>
 			</View>
@@ -38,18 +46,9 @@ export default function ConfirmationModal({
 }
 
 const styles = StyleSheet.create({
-	container: {
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	description: {
-		fontSize: 16,
-		marginBottom: 20,
-		textAlign: 'center',
-	},
 	buttonContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
+		flexDirection: "row",
+		justifyContent: "space-between",
 		marginTop: 16,
 	},
 	button: {

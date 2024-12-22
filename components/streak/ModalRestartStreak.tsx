@@ -25,34 +25,16 @@ export default function ModalRestartStreak({
 	return (
 		<ConfirmationModal
 			visible={visible}
-			description="Resume streak ?"
+			title="Resume streak ?"
+			description="This streak will return to your home"
 			onClose={closeModal}
 			onConfirm={confirmStop}
 			confirmText="Go!"
-		>
-			<View style={styles.inputContainer}>
-				<TextInput
-					editable
-					multiline
-					numberOfLines={4}
-					placeholder="Add a note (optional)"
-					placeholderTextColor="#666"
-					onChangeText={(text) => {
-						note.current = text;
-					}}
-					style={styles.textInput}
-				/>
-			</View>
-		</ConfirmationModal>
+		/>
 	);
 }
 
 const styles = StyleSheet.create({
-	inputContainer: {
-		width: "100%",
-		marginBottom: 10,
-		paddingHorizontal: 10,
-	},
 	textInput: {
 		backgroundColor: "#fff",
 		borderWidth: 1,

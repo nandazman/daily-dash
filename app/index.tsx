@@ -1,9 +1,11 @@
+import { ThemedText } from "@/components/ThemedText";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import React from "react";
-import { View, Text, StyleSheet, StatusBar } from "react-native";
+import { View, StyleSheet, StatusBar, useColorScheme, Platform } from "react-native";
 
-export default function StreakLayout() {
+export default function Home() {
+	const theme = useColorScheme() ?? 'light';
 	return (
 		<View style={styles.container}>
 			<View style={styles.topSection}>
@@ -11,9 +13,13 @@ export default function StreakLayout() {
 				<Link href="/(streak)">
 					<View style={styles.section}>
 						<View style={styles.logoContainer}>
-							<MaterialIcons name="whatshot" size={32} color="black" />
+							<MaterialIcons
+								name="whatshot"
+								size={32}
+								color={theme === "dark" ? "white" : "black"}
+							/>
 						</View>
-						<Text style={styles.label}>Streak</Text>
+						<ThemedText>Streak</ThemedText>
 					</View>
 				</Link>
 
@@ -24,10 +30,10 @@ export default function StreakLayout() {
 							<MaterialCommunityIcons
 								name="calendar-today"
 								size={24}
-								color="black"
+								color={theme === "dark" ? "white" : "black"}
 							/>
 						</View>
-						<Text style={styles.label}>Clock-In</Text>
+						<ThemedText>Clock-In</ThemedText>
 					</View>
 				</Link>
 			</View>
@@ -38,7 +44,6 @@ export default function StreakLayout() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#fff",
 		padding: 20,
 		paddingTop: StatusBar.currentHeight,
 	},
@@ -55,21 +60,13 @@ const styles = StyleSheet.create({
 	logoContainer: {
 		width: 80,
 		height: 80,
-		borderRadius: 12,
 		justifyContent: "center",
 		alignItems: "center",
 		marginBottom: 8,
-		backgroundColor: "#fff", // Light background color to resemble a button
-		// Box shadow for 3D effect
-		shadowColor: "#000", // Shadow color
-		shadowOffset: { width: 0, height: 2 }, // Shadow direction
-		shadowOpacity: 0.25, // Shadow intensity
-		shadowRadius: 3.5, // Shadow blur radius
-		elevation: 5, // For Android devices to support shadow
-	},
-	label: {
-		fontSize: 16,
-		fontWeight: "500",
-		color: "#000",
+		paddingTop: Platform.OS === "ios" ? 50 : 10,
+		paddingBottom: 10,
+		borderRadius: 8,
+		borderWidth: 1, // Adding a tiny border helps with shadow appearance
+		borderColor: "rgba(0,0,0,0.1)",
 	},
 });

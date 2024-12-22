@@ -10,9 +10,9 @@ import { SQLiteProvider, type SQLiteDatabase } from "expo-sqlite";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
-
-import { useColorScheme } from "@/hooks/useColorScheme";
 import { PaperProvider } from "react-native-paper";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -34,10 +34,28 @@ export default function RootLayout() {
 	}
 
 	return (
-		<ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+		<ThemeProvider
+			value={
+				colorScheme === "dark"
+					? {
+						...DarkTheme,
+						colors: {
+							...DarkTheme.colors,
+							background: Colors["dark"].background,
+						},
+					}
+					: DefaultTheme
+			}
+		>
 			<SQLiteProvider databaseName="streak.db" onInit={migrateDbIfNeeded}>
 				<PaperProvider>
-					<Stack>
+					<Stack
+						screenOptions={{
+							headerStyle: {
+								backgroundColor: Colors[colorScheme ?? "light"].background,
+							},
+						}}
+					>
 						<Stack.Screen name="index" options={{ headerShown: false }} />
 						<Stack.Screen name="(streak)" />
 						<Stack.Screen name="(check-in)" />
@@ -52,7 +70,7 @@ export default function RootLayout() {
 
 async function migrateDbIfNeeded(db: SQLiteDatabase) {
 	await db.execAsync(`PRAGMA foreign_keys = ON;`);
-	
+
 	const DATABASE_VERSION = 3;
 	const result = await db.getFirstAsync<{
 		user_version: number;

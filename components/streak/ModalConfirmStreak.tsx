@@ -10,6 +10,7 @@ import {
 	TextInput,
 	View,
 } from "react-native";
+import { ThemedText } from "../ThemedText";
 
 export default function ModalConfirmStreak({
 	visible,
@@ -36,9 +37,9 @@ export default function ModalConfirmStreak({
 
 	return (
 		<ModalWrapper visible={visible} onClose={closeModal}>
-			<Text style={{ fontWeight: 500, marginBottom: 8 }}>
+			<ThemedText style={{ fontWeight: 500, marginBottom: 8 }}>
 				Streak going great ?
-			</Text>
+			</ThemedText>
 			<TextInput
 				editable
 				multiline

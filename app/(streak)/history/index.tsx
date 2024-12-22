@@ -9,6 +9,8 @@ import Streak from "../../../type/streak";
 import ConfirmationModal from "@/components/ui/Modal/ConfirmationModal";
 import insertStreakHistory from "@/sql/streak/insertStreakHistory";
 import ModalRestartStreak from "@/components/streak/ModalRestartStreak";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 
 export default function TabTwoScreen() {
 	const db = useSQLiteContext();
@@ -73,10 +75,12 @@ export default function TabTwoScreen() {
 		setModalRestart(false);
 	};
 	return (
-		<View style={styles.container}>
-			<Text style={styles.title}>Your history streak!</Text>
+		<ThemedView style={styles.container}>
+			<ThemedText style={styles.title}>Your history streak!</ThemedText>
 			{streaks.length === 0 ? (
-				<Text style={{ paddingHorizontal: 16 }}>No streaks found</Text>
+				<ThemedText style={{ paddingHorizontal: 16 }}>
+					No streaks found
+				</ThemedText>
 			) : (
 				<View>
 					{streaks.map((streak, index) => {
@@ -92,7 +96,9 @@ export default function TabTwoScreen() {
 								}}
 								key={streak.id}
 							>
-								<Text style={{ paddingLeft: 8 }}>{streak.title}</Text>
+								<ThemedText style={{ paddingLeft: 8 }}>
+									{streak.title}
+								</ThemedText>
 								<View
 									style={{
 										flexDirection: "row",
@@ -101,10 +107,10 @@ export default function TabTwoScreen() {
 										columnGap: 4,
 									}}
 								>
-									<Text style={{ textAlign: "right", marginRight: 4 }}>
+									<ThemedText style={{ textAlign: "right", marginRight: 4 }}>
 										{`${daysDiff.toString()}`}
-									</Text>
-									<Text>
+									</ThemedText>
+									<ThemedText>
 										<IconButton
 											icon={() => (
 												<MaterialCommunityIcons
@@ -135,7 +141,7 @@ export default function TabTwoScreen() {
 											style={{ margin: 0, padding: 0, width: 24, height: 24 }}
 											size={24}
 										/>
-									</Text>
+									</ThemedText>
 								</View>
 							</View>
 						);
@@ -151,14 +157,15 @@ export default function TabTwoScreen() {
 			/>
 			<ConfirmationModal
 				visible={modalConfirmation}
-				description="Remove streak ? You can't restore it"
+				title="Remove streak ?"
+				description="You can't restore it"
 				onClose={() => setModalConfirmation(false)}
 				onConfirm={() => {
 					handleDelete();
 				}}
 				confirmText="Delete!"
 			/>
-		</View>
+		</ThemedView>
 	);
 }
 
@@ -173,7 +180,6 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		paddingTop: 16,
-		backgroundColor: "#fff",
 		height: "100%",
 	},
 	streakItemContainer: {

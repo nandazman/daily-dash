@@ -25,7 +25,8 @@ export default function ModalStopStreak({
 	return (
 		<ConfirmationModal
 			visible={visible}
-			description="Stop streak ? It will be moved to your history"
+			title="Stop streak ?"
+			description="It will be moved to your history"
 			onClose={closeModal}
 			onConfirm={confirmStop}
 			confirmText="Stop!"
@@ -50,8 +51,6 @@ export default function ModalStopStreak({
 const styles = StyleSheet.create({
 	inputContainer: {
 		width: "100%",
-		marginBottom: 10,
-		paddingHorizontal: 10,
 	},
 	textInput: {
 		backgroundColor: "#fff",

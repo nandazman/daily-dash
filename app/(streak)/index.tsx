@@ -14,6 +14,8 @@ import insertStreakHistory from "../../sql/streak/insertStreakHistory";
 import updateStreakFail from "../../sql/streak/updateStreakFail";
 import ModalStopStreak from "../../components/streak/ModalStopStreak";
 import ModalConfirmStreak from "@/components/streak/ModalConfirmStreak";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 
 export default function Home() {
 	const db = useSQLiteContext();
@@ -28,11 +30,6 @@ export default function Home() {
 		const streaks = await db.getAllAsync<Streak>(
 			'SELECT * FROM streak WHERE status = "active"',
 		);
-		console.log({
-			test: await db.getAllAsync<Streak>(
-				'SELECT * FROM streak_history',
-			),
-		});
 		const updatedStreak = await checkStreakStatus({
 			streaks,
 			async onUpdateStatus(id) {
@@ -116,12 +113,14 @@ export default function Home() {
 
 	return (
 		<>
-			<View style={styles.container}>
-				<Text style={styles.title}>
+			<ThemedView style={styles.container}>
+				<ThemedText style={styles.title}>
 					How does your streak go? <HelloWave />
-				</Text>
+				</ThemedText>
 				{streaks.length === 0 ? (
-					<Text style={{ paddingHorizontal: 16 }}>No streaks found</Text>
+					<ThemedText style={{ paddingHorizontal: 16 }}>
+						No streaks found
+					</ThemedText>
 				) : (
 					<View>
 						{streaks.map((streak, index) => {
@@ -141,7 +140,9 @@ export default function Home() {
 									}}
 									key={streak.id}
 								>
-									<Text style={{ paddingLeft: 8 }}>{streak.title}</Text>
+									<ThemedText style={{ paddingLeft: 8 }}>
+										{streak.title}
+									</ThemedText>
 									<View
 										style={{
 											flexDirection: "row",
@@ -150,10 +151,10 @@ export default function Home() {
 											columnGap: 4,
 										}}
 									>
-										<Text style={{ textAlign: "right", marginRight: 4 }}>
+										<ThemedText style={{ textAlign: "right", marginRight: 4 }}>
 											{isActive ? daysDiff.toString() : "FAIL"}
-										</Text>
-										<Text>
+										</ThemedText>
+										<ThemedText>
 											<IconButton
 												icon={() => (
 													<MaterialCommunityIcons
@@ -187,14 +188,14 @@ export default function Home() {
 												style={{ margin: 0, padding: 0, width: 24, height: 24 }}
 												size={24}
 											/>
-										</Text>
+										</ThemedText>
 									</View>
 								</View>
 							);
 						})}
 					</View>
 				)}
-			</View>
+			</ThemedView>
 
 			<FAB
 				style={styles.fab}
@@ -249,7 +250,6 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		paddingTop: 16,
-		backgroundColor: "#fff",
 		height: "100%",
 	},
 	fab: {

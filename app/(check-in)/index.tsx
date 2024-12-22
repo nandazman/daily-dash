@@ -17,6 +17,8 @@ import getDateDiffInDays from '@/helper/getDateDiffInDays';
 import { useFocusEffect } from 'expo-router';
 import { HelloWave } from '@/components/HelloWave';
 import Streak from '@/type/streak';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedButton } from '@/components/ThemedButton';
 
 export default function Home() {
 	const db = useSQLiteContext();
@@ -129,11 +131,13 @@ export default function Home() {
 	return (
 		<PaperProvider>
 			<View style={styles.container}>
-				<Text style={styles.title}>
-          How does your streak go? <HelloWave />
-				</Text>
+				<ThemedText style={styles.title}>
+					How does your streak go? <HelloWave />
+				</ThemedText>
 				{streaks.length === 0 ? (
-					<Text style={{ marginHorizontal: 16 }}>No streaks found</Text>
+					<ThemedText style={{ marginHorizontal: 16 }}>
+						No streaks found
+					</ThemedText>
 				) : (
 					<View>
 						{streaks.map((streak) => {
@@ -142,31 +146,33 @@ export default function Home() {
 								endDate: streak.current_streak_date,
 							});
 							const isAlreadyUpdate =
-                getDateDiffInDays({ startDate: streak.current_streak_date }) <
-                1;
-							const isActive = streak.status === 'active';
+								getDateDiffInDays({ startDate: streak.current_streak_date }) <
+								1;
+							const isActive = streak.status === "active";
 							return (
 								<View style={styles.streakItemContainer} key={streak.id}>
-									<Text style={{ paddingLeft: 8 }}>{streak.title}</Text>
+									<ThemedText style={{ paddingLeft: 8 }}>
+										{streak.title}
+									</ThemedText>
 									<View
 										style={{
-											flexDirection: 'row',
-											alignItems: 'center',
-											justifyContent: 'flex-end',
+											flexDirection: "row",
+											alignItems: "center",
+											justifyContent: "flex-end",
 											columnGap: 4,
 										}}
 									>
-										<Text style={{ textAlign: 'right', marginRight: 4 }}>
-											{isActive ? daysDiff.toString() : 'FAIL'}
-										</Text>
-										<Text>
+										<ThemedText style={{ textAlign: "right", marginRight: 4 }}>
+											{isActive ? daysDiff.toString() : "FAIL"}
+										</ThemedText>
+										<ThemedText>
 											<IconButton
 												icon={() => (
 													<MaterialCommunityIcons
 														name="plus-circle"
 														size={24}
 														color={
-															isAlreadyUpdate || !isActive ? '#888' : '#4CAF50'
+															isAlreadyUpdate || !isActive ? "#888" : "#4CAF50"
 														}
 													/>
 												)}
@@ -189,14 +195,14 @@ export default function Home() {
 												style={{ margin: 0, padding: 0, width: 24, height: 24 }}
 												size={24}
 											/>
-										</Text>
+										</ThemedText>
 									</View>
 								</View>
 							);
 						})}
 					</View>
 				)}
-        ?
+				?
 			</View>
 
 			<FAB
@@ -214,28 +220,26 @@ export default function Home() {
 			>
 				<View style={styles.modalOverlay}>
 					<View style={styles.modalContent}>
-						<Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>
-              😢 Failed Streaks
-						</Text>
+						<ThemedText
+							style={{ fontSize: 18, fontWeight: "bold", marginBottom: 8 }}
+						>
+							😢 Failed Streaks
+						</ThemedText>
 						<ScrollView contentContainerStyle={{ paddingBottom: 0 }}>
 							{streaks
-							// .filter((item) => item.status === 'fail')
+								// .filter((item) => item.status === 'fail')
 								.map((item, index) => (
 									<View key={item.id?.toString()} style={{ marginBottom: 8 }}>
-										<Text style={{ fontSize: 16 }}>
+										<ThemedText style={{ fontSize: 16 }}>
 											{index + 1}. {item.title}
-										</Text>
+										</ThemedText>
 									</View>
 								))}
 						</ScrollView>
-						<Text style={{ fontSize: 14, marginBottom: 16 }}>
-              The above streaks have been inactive for more than 2 days. They
-              will be removed from active streaks and added to the history page.
-						</Text>
-						<Button
-							title="Acknowledge"
-							onPress={handleAcknowledgeFailedStreaks}
-						/>
+						<ThemedText style={{ fontSize: 14, marginBottom: 16 }}>
+							The above streaks have been inactive for more than 2 days. They
+							will be removed from active streaks and added to the history page.
+						</ThemedText>
 					</View>
 				</View>
 			</Modal>
@@ -249,7 +253,9 @@ export default function Home() {
 				>
 					<View style={styles.modalOverlay}>
 						<View style={styles.modalContent}>
-							<Text style={styles.modalLabel}>Streak to Break Next!</Text>
+							<ThemedText style={styles.modalLabel}>
+								Streak to Break Next!
+							</ThemedText>
 							<TextInput
 								style={styles.input}
 								placeholder="Name of the streak"
