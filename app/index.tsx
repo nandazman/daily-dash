@@ -2,17 +2,30 @@ import { ThemedText } from "@/components/ThemedText";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import React from "react";
-import { View, StyleSheet, StatusBar, useColorScheme, Platform } from "react-native";
+import {
+	View,
+	StyleSheet,
+	StatusBar,
+	useColorScheme,
+	Platform,
+} from "react-native";
 
 export default function Home() {
-	const theme = useColorScheme() ?? 'light';
+	const theme = useColorScheme() ?? "light";
+	const borderColor =
+		theme === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
 	return (
 		<View style={styles.container}>
 			<View style={styles.topSection}>
 				{/* Streak Section */}
 				<Link href="/(streak)">
 					<View style={styles.section}>
-						<View style={styles.logoContainer}>
+						<View
+							style={{
+								...styles.logoContainer,
+								borderColor,
+							}}
+						>
 							<MaterialIcons
 								name="whatshot"
 								size={32}
@@ -26,7 +39,12 @@ export default function Home() {
 				{/* Clock-In Section */}
 				<Link href="/(check-in)">
 					<View style={styles.section}>
-						<View style={styles.logoContainer}>
+						<View
+							style={{
+								...styles.logoContainer,
+								borderColor,
+							}}
+						>
 							<MaterialCommunityIcons
 								name="calendar-today"
 								size={24}
@@ -66,7 +84,6 @@ const styles = StyleSheet.create({
 		paddingTop: Platform.OS === "ios" ? 50 : 10,
 		paddingBottom: 10,
 		borderRadius: 8,
-		borderWidth: 1, // Adding a tiny border helps with shadow appearance
-		borderColor: "rgba(0,0,0,0.1)",
+		borderWidth: 1,
 	},
 });

@@ -1,6 +1,6 @@
 import ModalWrapper from "@/components/ui/Modal/ModalWrapper";
 import Streak from "@/type/streak";
-import { Button, ScrollView, Text, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { ThemedText } from "../ThemedText";
 import { ThemedButton } from "../ThemedButton";
 

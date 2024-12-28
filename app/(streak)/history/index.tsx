@@ -3,7 +3,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useRef, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { IconButton } from "react-native-paper";
 import Streak from "../../../type/streak";
 import ConfirmationModal from "@/components/ui/Modal/ConfirmationModal";

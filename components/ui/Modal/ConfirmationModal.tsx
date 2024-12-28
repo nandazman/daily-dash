@@ -1,5 +1,5 @@
-import React, { ComponentProps } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import { ComponentProps } from "react";
+import { View, StyleSheet } from "react-native";
 import ModalWrapper from "./ModalWrapper";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedButton } from "@/components/ThemedButton";

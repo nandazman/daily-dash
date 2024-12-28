@@ -1,6 +1,5 @@
 import ConfirmationModal from "@/components/ui/Modal/ConfirmationModal";
 import { useRef } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
 
 export default function ModalRestartStreak({
 	visible,
@@ -9,7 +8,7 @@ export default function ModalRestartStreak({
 }: {
 	visible: boolean;
 	onClose: () => void;
-	onConfirm: (note: string) => void;
+	onConfirm: (_: string) => void;
 }) {
 	const note = useRef("");
 
@@ -33,17 +32,3 @@ export default function ModalRestartStreak({
 		/>
 	);
 }
-
-const styles = StyleSheet.create({
-	textInput: {
-		backgroundColor: "#fff",
-		borderWidth: 1,
-		borderColor: "#ddd",
-		borderRadius: 8,
-		padding: 12,
-		minHeight: 100,
-		textAlignVertical: "top",
-		fontSize: 14,
-		color: "#333",
-	},
-});

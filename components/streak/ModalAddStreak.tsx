@@ -7,7 +7,6 @@ import {
 	TextInput,
 	View,
 } from "react-native";
-import { ThemedText } from "../ThemedText";
 import { ThemedButton } from "../ThemedButton";
 
 export default function ModalAddStreak({

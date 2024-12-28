@@ -9,7 +9,7 @@ export default function ModalStopStreak({
 }: {
 	visible: boolean;
 	onClose: () => void;
-	onConfirm: (note: string) => void;
+	onConfirm: (_: string) => void;
 }) {
 	const note = useRef("");
 

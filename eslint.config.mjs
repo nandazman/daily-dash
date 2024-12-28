@@ -16,6 +16,7 @@ export default [
 				...globals.browser,
 				require: 'readonly', // Allow `require` as global (for CommonJS modules)
 				process: 'readonly', // Allow `process` as global (commonly used in Node.js)
+				React: 'readonly',   // Ensure React can be used as a global
 			},
 		},
 	},
@@ -24,11 +25,31 @@ export default [
 	pluginReact.configs.flat.recommended,
 	{
 		rules: {
-			'react/react-in-jsx-scope': 'off',
+			'react/react-in-jsx-scope': 'off', // Disable rule for React in JSX scope
 			'react/no-unescaped-entities': 'off',
 			'@typescript-eslint/no-require-imports': 'off',
 			'indent': ['warn', 'tab'],
-			'@typescript-eslint/no-unused-vars': ['off', { argsIgnorePattern: '^_' }]
+			'@typescript-eslint/no-unused-vars': [
+				'warn',
+				{
+					argsIgnorePattern: '^_',
+					vars: 'all',
+					args: 'after-used',
+					ignoreRestSiblings: true,
+				},
+			],
+			'no-unused-vars': [
+				'warn',
+				{
+					argsIgnorePattern: '^_',
+					vars: 'all',
+					args: 'after-used',
+					varsIgnorePattern: '^_',
+				},
+			],
+			// Suppress TypeScript-specific warning for React UMD global
+			'react/jsx-uses-react': 'off',
+			'react/jsx-uses-vars': 'warn',
 		},
 	},
 ];

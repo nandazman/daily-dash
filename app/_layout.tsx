@@ -93,9 +93,9 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
 	}
 	if (currentDbVersion === 1) {
 		await db.execAsync(`
-      ALTER TABLE streak ADD COLUMN current_streak_date INTEGER;
-      ALTER TABLE streak ADD COLUMN status TEXT DEFAULT 'active';
-    `);
+			ALTER TABLE streak ADD COLUMN current_streak_date INTEGER;
+			ALTER TABLE streak ADD COLUMN status TEXT DEFAULT 'active';
+		`);
 
 		await db.runAsync(
 			"INSERT INTO streak (title, start_date) VALUES (?, ?)",
@@ -120,15 +120,22 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
 
 		await db.execAsync(`
 			CREATE TABLE IF NOT EXISTS streak_photos (
-			id INTEGER PRIMARY KEY NOT NULL,
-			streak_id INTEGER NOT NULL,
-			milestone INTEGER NOT NULL,
-			photo_url TEXT NOT NULL,
-			added_date INTEGER NOT NULL,
-			FOREIGN KEY (streak_id) REFERENCES streak(id) ON DELETE CASCADE
+				id INTEGER PRIMARY KEY NOT NULL,
+				streak_id INTEGER NOT NULL,
+				milestone INTEGER NOT NULL,
+				photo_url TEXT NOT NULL,
+				added_date INTEGER NOT NULL,
+				FOREIGN KEY (streak_id) REFERENCES streak(id) ON DELETE CASCADE
 			);
 		`);
 		currentDbVersion = 3;
+	}
+
+	if (currentDbVersion === 3) {
+		await db.execAsync(`
+			ALTER TABLE streak_photos ADD COLUMN message TEXT;
+		`);
+		currentDbVersion = 4;
 	}
 	await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }

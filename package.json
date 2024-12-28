@@ -1,5 +1,5 @@
 {
-  "name": "first-app",
+  "name": "streak-progress",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
@@ -15,12 +15,16 @@
   "jest": {
     "preset": "jest-expo"
   },
+  "eslintConfig": {
+    "extends": "./eslint.config.mjs"
+  },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/native": "^7.0.0",
     "expo": "~52.0.11",
     "expo-blur": "~14.0.1",
+    "expo-camera": "^16.0.10",
     "expo-constants": "~17.0.3",
     "expo-font": "~13.0.1",
     "expo-haptics": "~14.0.0",
@@ -49,7 +53,7 @@
     "@types/jest": "^29.5.12",
     "@types/react": "~18.3.12",
     "@types/react-test-renderer": "^18.3.0",
-    "eslint": "^9.17.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.37.2",
@@ -59,7 +63,8 @@
     "prettier": "^3.4.2",
     "react-test-renderer": "18.3.1",
     "typescript": "^5.3.3",
-    "typescript-eslint": "^8.18.0"
+    "typescript-eslint": "^8.18.0",
+    "eslint-config-expo": "~8.0.1"
   },
   "private": true
 }

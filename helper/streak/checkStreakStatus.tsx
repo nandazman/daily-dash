@@ -6,7 +6,7 @@ export default async function checkStreakStatus({
 	onUpdateStatus,
 }: {
 	streaks: Streak[];
-	onUpdateStatus: (id: number) => Promise<void>;
+	onUpdateStatus: (_: number) => Promise<void>;
 }) {
 	const updatedStreak = [];
 	for (let i = 0; i < streaks.length; i++) {

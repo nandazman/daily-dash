@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { FAB, IconButton } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import getDateDiffInDays from "@/helper/getDateDiffInDays";
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { HelloWave } from "@/components/HelloWave";
 import Streak from "../../type/streak";
 import ModalFailedStreak from "../../components/streak/ModalFailedStreak";
@@ -56,10 +56,6 @@ export default function Home() {
 	useFocusEffect(
 		React.useCallback(() => {
 			fetchStreak();
-			return () => {
-				// Do something when the screen is unfocused
-				// Useful for cleanup functions
-			};
 		}, [db]),
 	);
 
@@ -81,6 +77,18 @@ export default function Home() {
 				},
 			});
 		});
+		const streak = streaks.find((item) => item.id === streakId);
+		if (streak) {
+			const daysDiff = getDateDiffInDays({
+				startDate: streak.start_date,
+				endDate: streak.current_streak_date,
+			});
+
+			if (daysDiff % 5 === 0) {
+				router.replace(`/(streak)/polaroid/${streak.id}`);
+				return;
+			}
+		}
 
 		const result = await db.getAllAsync<Streak>(
 			'SELECT * FROM streak WHERE status = "active"',
@@ -159,7 +167,7 @@ export default function Home() {
 												icon={() => (
 													<MaterialCommunityIcons
 														name="plus-circle"
-														size={24}
+														size={20}
 														color={
 															isAlreadyUpdate || !isActive ? "#888" : "#4CAF50"
 														}
@@ -177,7 +185,7 @@ export default function Home() {
 												icon={() => (
 													<MaterialCommunityIcons
 														name="stop-circle"
-														size={24}
+														size={20}
 														color="#f28585"
 													/>
 												)}

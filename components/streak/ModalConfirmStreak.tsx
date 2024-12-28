@@ -1,4 +1,4 @@
-import { useSQLiteContext } from "expo-sqlite";
+
 import { useRef, useState } from "react";
 import ModalWrapper from "../ui/Modal/ModalWrapper";
 
@@ -6,7 +6,6 @@ import {
 	ActivityIndicator,
 	Button,
 	StyleSheet,
-	Text,
 	TextInput,
 	View,
 } from "react-native";
@@ -19,7 +18,7 @@ export default function ModalConfirmStreak({
 }: {
 	visible: boolean;
 	onClose: () => void;
-	onConfirm: (note: string) => Promise<void>;
+	onConfirm: (_: string) => Promise<void>;
 }) {
 	const note = useRef("");
 	const [loading, setLoading] = useState(false);
