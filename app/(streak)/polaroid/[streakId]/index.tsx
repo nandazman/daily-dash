@@ -6,13 +6,13 @@ import { StyleSheet } from "react-native";
 import Streak from "../../../../type/streak";
 import { ThemedView } from "@/components/ThemedView";
 import { useStack } from "@/providers/StackProviders";
-import { PolaroidView } from "@/components/polaroid/PolaroidView";
+import { TakePolaroid } from "@/components/polaroid/TakePolaroid";
 
 type StreakWithNote = Omit<Streak, "status"> & {
 	action_date: number;
 	note: string;
 };
-export default function TabTwoScreen() {
+export default function PolaroidTakePhoto() {
 	const { action } = useStack();
 	const { streakId } = useLocalSearchParams();
 	const db = useSQLiteContext();
@@ -66,7 +66,7 @@ export default function TabTwoScreen() {
 
 	return (
 		<ThemedView style={styles.container}>
-			<PolaroidView
+			<TakePolaroid
 				streakId={streakData.id}
 				note={streakData.note}
 				title={streakData.title}
@@ -77,25 +77,8 @@ export default function TabTwoScreen() {
 }
 
 const styles = StyleSheet.create({
-	title: {
-		fontSize: 24,
-		paddingHorizontal: 16,
-		borderBottomWidth: 1,
-		borderBottomColor: "#ccc",
-		paddingBottom: 4,
-		marginBottom: 16,
-	},
 	container: {
 		paddingTop: 16,
 		height: "100%",
-	},
-	streakItemContainer: {
-		borderBottomWidth: 1,
-		borderBottomColor: "#ccc",
-		marginBottom: 10,
-		justifyContent: "space-between",
-		flexDirection: "row",
-		alignItems: "center",
-		padding: 8,
-	},
+	}
 });

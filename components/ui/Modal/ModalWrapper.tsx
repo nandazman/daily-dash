@@ -40,7 +40,7 @@ export default function ModalWrapper({
 						<View style={styles.modalHeader}>
 							{title && (
 								<ThemedText
-									style={{ flex: 1 }}
+									style={{ flex: 10 }}
 									type="defaultSemiBold"
 								>
 									{title}
@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
 	closeButton: {
 		padding: 5,
 		flex: 1,
-		
 	},
 	modalView: {
 		backgroundColor: "white",

@@ -4,7 +4,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { FAB, IconButton } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import getDateDiffInDays from "@/helper/getDateDiffInDays";
-import { router, useFocusEffect } from "expo-router";
+import { useFocusEffect } from "expo-router";
 import { HelloWave } from "@/components/HelloWave";
 import Streak from "../../type/streak";
 import ModalFailedStreak from "../../components/streak/ModalFailedStreak";
@@ -16,6 +16,7 @@ import ModalStopStreak from "../../components/streak/ModalStopStreak";
 import ModalConfirmStreak from "@/components/streak/ModalConfirmStreak";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import ModalAskPolaroid from "@/components/streak/ModalAskPolaroid";
 
 export default function Home() {
 	const db = useSQLiteContext();
@@ -24,6 +25,8 @@ export default function Home() {
 	const [modalConfirmStreak, setModalConfirmStreak] = useState(false);
 	const [modalFailed, setModalFailed] = useState(false);
 	const [modalConfirmation, setModalConfirmation] = useState(false);
+	const [modalConfirmPhoto, setrModalConfirmPhoto] = useState(false);
+	const [selectedStreak, setSelectedStreak] = useState<Streak | null>(null);
 	const selectedStreakId = useRef(0);
 
 	const fetchStreak = async () => {
@@ -77,7 +80,14 @@ export default function Home() {
 				},
 			});
 		});
-		const streak = streaks.find((item) => item.id === streakId);
+
+		const result = await db.getAllAsync<Streak>(
+			'SELECT * FROM streak WHERE status = "active"',
+		);
+		setStreaks(result);
+		setModalConfirmStreak(false);
+
+		const streak = result.find((item) => item.id === streakId);
 		if (streak) {
 			const daysDiff = getDateDiffInDays({
 				startDate: streak.start_date,
@@ -85,16 +95,11 @@ export default function Home() {
 			});
 
 			if (daysDiff % 5 === 0) {
-				router.replace(`/(streak)/polaroid/${streak.id}`);
+				setrModalConfirmPhoto(true);
+				setSelectedStreak(streak);
 				return;
 			}
 		}
-
-		const result = await db.getAllAsync<Streak>(
-			'SELECT * FROM streak WHERE status = "active"',
-		);
-		setStreaks(result);
-		setModalConfirmStreak(false);
 	};
 
 	const handleDelete = async (note: string) => {
@@ -243,6 +248,16 @@ export default function Home() {
 					handleCheckIn(note);
 				}}
 			/>
+			{!!selectedStreak && (
+				<ModalAskPolaroid
+					visible={modalConfirmPhoto}
+					onClose={() => {
+						setrModalConfirmPhoto(false);
+						setSelectedStreak(null);
+					}}
+					streak={selectedStreak}
+				/>
+			)}
 		</>
 	);
 }

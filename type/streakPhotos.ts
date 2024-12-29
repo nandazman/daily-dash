@@ -4,4 +4,5 @@ export type StreakPhoto = {
   milestone: number;
   photo_url: string;
   added_date: number;
+  message: string;
 }

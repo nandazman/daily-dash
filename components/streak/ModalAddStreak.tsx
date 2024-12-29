@@ -1,12 +1,7 @@
 import ModalWrapper from "@/components/ui/Modal/ModalWrapper";
 import { useSQLiteContext } from "expo-sqlite";
 import { useRef, useState } from "react";
-import {
-	ActivityIndicator,
-	StyleSheet,
-	TextInput,
-	View,
-} from "react-native";
+import { ActivityIndicator, StyleSheet, TextInput, View } from "react-native";
 import { ThemedButton } from "../ThemedButton";
 
 export default function ModalAddStreak({
@@ -61,12 +56,14 @@ export default function ModalAddStreak({
 				}}
 			/>
 			<View style={styles.modalActions}>
-				<ThemedButton
-					title="Cancel"
-					onPress={closeModal}
-					disabled={loading}
-					type="transparent"
-				/>
+				<View style={{ flex: 1 }}>
+					<ThemedButton
+						title="Cancel"
+						onPress={closeModal}
+						disabled={loading}
+						type="transparent"
+					/>
+				</View>
 				<View style={styles.saveButtonContainer}>
 					{loading ? (
 						<ActivityIndicator size="small" color="#000" animating={loading} />
@@ -87,6 +84,7 @@ const styles = StyleSheet.create({
 	saveButtonContainer: {
 		flexDirection: "row",
 		alignItems: "center",
+		flex: 1,
 	},
 	input: {
 		height: 40,
@@ -95,11 +93,11 @@ const styles = StyleSheet.create({
 		borderRadius: 4,
 		paddingHorizontal: 8,
 		marginBottom: 20,
-		backgroundColor: "#fff"
+		backgroundColor: "#fff",
 	},
 	modalActions: {
 		flexDirection: "row",
-		justifyContent: "flex-end",
+		justifyContent: "space-between",
 		columnGap: 8,
 	},
 });

@@ -71,7 +71,7 @@ export default function RootLayout() {
 async function migrateDbIfNeeded(db: SQLiteDatabase) {
 	await db.execAsync(`PRAGMA foreign_keys = ON;`);
 
-	const DATABASE_VERSION = 3;
+	const DATABASE_VERSION = 4;
 	const result = await db.getFirstAsync<{
 		user_version: number;
 	}>("PRAGMA user_version");
@@ -100,8 +100,7 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
 		await db.runAsync(
 			"INSERT INTO streak (title, start_date) VALUES (?, ?)",
 			"My first streak!",
-			currentDate.getTime(),
-			currentDate.getTime(),
+			currentDate.getTime()
 		);
 		currentDbVersion = 2;
 	}

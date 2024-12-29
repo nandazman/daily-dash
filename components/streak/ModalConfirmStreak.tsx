@@ -10,6 +10,7 @@ import {
 	View,
 } from "react-native";
 import { ThemedText } from "../ThemedText";
+import { ThemedButton } from "../ThemedButton";
 
 export default function ModalConfirmStreak({
 	visible,
@@ -35,10 +36,7 @@ export default function ModalConfirmStreak({
 	};
 
 	return (
-		<ModalWrapper visible={visible} onClose={closeModal}>
-			<ThemedText style={{ fontWeight: 500, marginBottom: 8 }}>
-				Streak going great ?
-			</ThemedText>
+		<ModalWrapper title="Going Great ?" visible={visible} onClose={closeModal}>
 			<TextInput
 				editable
 				multiline
@@ -50,17 +48,23 @@ export default function ModalConfirmStreak({
 				placeholder="Optional"
 			/>
 			<View style={styles.modalActions}>
-				<Button
-					title="Cancel"
-					onPress={closeModal}
-					color="#888"
-					disabled={loading}
-				/>
+				<View style={styles.buttonStyle}>
+					<ThemedButton
+						title="Cancel"
+						onPress={closeModal}
+						disabled={loading}
+						type="transparent"
+					/>
+				</View>
 				<View style={styles.saveButtonContainer}>
 					{loading ? (
 						<ActivityIndicator size="small" color="#000" animating={loading} />
 					) : (
-						<Button title="Procced!" onPress={updateStreak} />
+						<ThemedButton
+							type="confirmation"
+							title="Procced!"
+							onPress={updateStreak}
+						/>
 					)}
 				</View>
 			</View>
@@ -82,13 +86,16 @@ const styles = StyleSheet.create({
 	},
 	modalActions: {
 		flexDirection: "row",
-		justifyContent: "flex-end",
+		justifyContent: "space-between",
+		alignItems: "center",
 		columnGap: 8,
 		marginTop: 16,
 	},
 
 	saveButtonContainer: {
-		flexDirection: "row",
-		alignItems: "center",
+		flex: 1,
 	},
+	buttonStyle: {
+		flex: 1
+	}
 });

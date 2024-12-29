@@ -7,6 +7,7 @@ import { IconSymbol } from "@/components/ui/IconSymbol";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { StackProviders } from "@/providers/StackProviders";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function TabLayout() {
 	const colorScheme = useColorScheme() ?? "light";
@@ -54,9 +55,18 @@ export default function TabLayout() {
 					}}
 				/>
 				<Tabs.Screen
-					name="polaroid/[streakId]/index" //
+					name="polaroid/index"
 					options={{
-						href: null
+						title: "Memories",
+						tabBarIcon: ({ color }) => (
+							<MaterialCommunityIcons name="polaroid" size={28} color={color} />
+						),
+					}}
+				/>
+				<Tabs.Screen
+					name="polaroid/[streakId]/index"
+					options={{
+						href: null,
 					}}
 				/>
 			</Tabs>
