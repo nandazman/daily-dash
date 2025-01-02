@@ -17,6 +17,7 @@ import ModalConfirmStreak from "@/components/streak/ModalConfirmStreak";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import ModalAskPolaroid from "@/components/streak/ModalAskPolaroid";
+import { useStreakNotification } from "@/hooks/useStreakNotification";
 
 export default function Home() {
 	const db = useSQLiteContext();
@@ -28,6 +29,7 @@ export default function Home() {
 	const [modalConfirmPhoto, setrModalConfirmPhoto] = useState(false);
 	const [selectedStreak, setSelectedStreak] = useState<Streak | null>(null);
 	const selectedStreakId = useRef(0);
+	const { createNotification, removeNotification } = useStreakNotification();
 
 	const fetchStreak = async () => {
 		const streaks = await db.getAllAsync<Streak>(
@@ -49,10 +51,17 @@ export default function Home() {
 				});
 			},
 		});
-		setStreaks(updatedStreak);
 
-		if (updatedStreak.some((item) => item.status === "fail")) {
+		setStreaks(updatedStreak);
+		const failedStreak = updatedStreak.filter((item) => item.status === "fail");
+		if (failedStreak.length > 0) {
 			setModalFailed(true);
+		}
+
+		if (updatedStreak.length === failedStreak.length) {
+			createNotification();
+		} else {
+			removeNotification();
 		}
 	};
 

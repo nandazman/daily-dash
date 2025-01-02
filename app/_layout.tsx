@@ -13,6 +13,7 @@ import "react-native-reanimated";
 import { PaperProvider } from "react-native-paper";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "react-native";
+import { useNotificationObserver } from "@/hooks/useNotificationObserver";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -22,6 +23,7 @@ export default function RootLayout() {
 	const [loaded] = useFonts({
 		SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
 	});
+	useNotificationObserver();
 
 	useEffect(() => {
 		if (loaded) {
