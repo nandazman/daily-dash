@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       platform:
-        description: 'Select platform to build: android or ios'
+        description: 'Select platform to build: android, ios, or all'
         required: true
         default: 'android'
 
@@ -26,4 +26,7 @@ jobs:
         run: npm ci
       - name: Build on EAS
         run: |
-          eas build --platform ${{ inputs.platform }} --non-interactive --no-wait
+          if [[ "${{ inputs.platform }}" == "all" ]]; then
+            eas build --platform all --non-interactive --no-wait
+          else
+            eas build --platform ${{ inputs.platform }} --non-interactive --no-wait
