@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "first-app",
-    "slug": "first-app",
+    "name": "Daily Dash",
+    "slug": "daily-dash",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "dailydash",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "jsEngine": "hermes",
