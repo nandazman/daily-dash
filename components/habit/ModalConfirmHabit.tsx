@@ -1,16 +1,10 @@
-
 import { useRef, useState } from "react";
 import ModalWrapper from "../ui/Modal/ModalWrapper";
 
-import {
-	ActivityIndicator,
-	StyleSheet,
-	TextInput,
-	View,
-} from "react-native";
+import { ActivityIndicator, StyleSheet, TextInput, View } from "react-native";
 import { ThemedButton } from "../ThemedButton";
 
-export default function ModalConfirmStreak({
+export default function ModalConfirmHabit({
 	visible,
 	onClose,
 	onConfirm,
@@ -26,7 +20,7 @@ export default function ModalConfirmStreak({
 		note.current = "";
 	};
 
-	const updateStreak = async () => {
+	const updateHabit = async () => {
 		setLoading(true);
 		await onConfirm(note.current);
 		note.current = "";
@@ -61,7 +55,7 @@ export default function ModalConfirmStreak({
 						<ThemedButton
 							type="confirmation"
 							title="Procced!"
-							onPress={updateStreak}
+							onPress={updateHabit}
 						/>
 					)}
 				</View>
@@ -94,6 +88,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	buttonStyle: {
-		flex: 1
-	}
+		flex: 1,
+	},
 });

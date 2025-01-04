@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/ThemedText";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import React from "react";
 import {
@@ -36,8 +36,7 @@ export default function Home() {
 					</View>
 				</Link>
 
-				{/* Clock-In Section */}
-				<Link href="/(check-in)">
+				<Link href="/(habit)">
 					<View style={styles.section}>
 						<View
 							style={{
@@ -45,13 +44,13 @@ export default function Home() {
 								borderColor,
 							}}
 						>
-							<MaterialCommunityIcons
-								name="calendar-today"
+							<MaterialIcons
+								name="local-activity"
 								size={24}
 								color={theme === "dark" ? "white" : "black"}
 							/>
 						</View>
-						<ThemedText>Clock-In</ThemedText>
+						<ThemedText>Habit</ThemedText>
 					</View>
 				</Link>
 			</View>

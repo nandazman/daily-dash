@@ -1,52 +1,51 @@
-import getDateDiffInDays from "@/helper/getDateDiffInDays";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useCallback, useState } from "react";
 import { StyleSheet } from "react-native";
-import Streak from "../../../../type/streak";
 import { ThemedView } from "@/components/ThemedView";
 import { useStack } from "@/providers/StackProviders";
 import { TakePolaroid } from "@/components/polaroid/TakePolaroid";
+import Habit from "@/type/habit";
 import { savePhotoToAppStorage } from "@/helper/photoStorge";
 
-type StreakWithNote = Omit<Streak, "status"> & {
+type HabitWithNote = Omit<Habit, "status"> & {
 	action_date: number;
 	note: string;
 };
 export default function PolaroidTakePhoto() {
 	const { action } = useStack();
-	const { streakId } = useLocalSearchParams();
+	const { habitId } = useLocalSearchParams();
 	const db = useSQLiteContext();
 
-	const [streakData, setStreakData] = useState<StreakWithNote | null>(null);
-	const fetchStreak = async () => {
-		const streak = await db.getAllAsync<StreakWithNote>(
+	const [habitData, setHabitData] = useState<HabitWithNote | null>(null);
+	const fetchHabit = async () => {
+		const habit = await db.getAllAsync<HabitWithNote>(
 			`SELECT 
-                s.id AS id,
-                s.title,
-                s.start_date,
-                s.current_streak_date,
-                sh.note
+                h.id AS id,
+                h.title,
+                h.start_date,
+                h.count,
+                hh.note
             FROM 
-                streak s
+                habit h
             LEFT JOIN 
-                streak_history sh
+                habit_history hh
             ON 
-                s.id = sh.streak_id
+                h.id = hh.habit_id
             WHERE 
-                s.id = ${+streakId}
+                h.id = ${+habitId}
             ORDER BY 
-                sh.action_date DESC
+                hh.action_date DESC
             LIMIT 1;`,
 		);
 
-		if (!streak[0]) return;
-		setStreakData(streak[0]);
+		if (!habit[0]) return;
+		setHabitData(habit[0]);
 	};
 
 	useFocusEffect(
 		React.useCallback(() => {
-			fetchStreak();
+			fetchHabit();
 		}, [db]),
 	);
 	useFocusEffect(
@@ -57,28 +56,28 @@ export default function PolaroidTakePhoto() {
 			};
 		}, []),
 	);
+	
+	if (!habitData) return <ThemedView style={styles.container} />;
 
-	if (!streakData) return <ThemedView style={styles.container} />;
-
-	const milestone = getDateDiffInDays({
-		startDate: streakData.start_date,
-		endDate: streakData.current_streak_date,
-	});
+	const milestone = habitData.count;
 
 	return (
 		<ThemedView style={styles.container}>
 			<TakePolaroid
+				note={habitData.note}
+				title={habitData.title}
+				milestone={milestone}
 				onSavePhoto={async ({ photoUri, message }) => {
 					const path = await savePhotoToAppStorage({
 						uri: photoUri,
-						fileName: `streak_${streakData.id}_milestone_${milestone}_${Date.now()}.jpg`,
+						fileName: `habit_${habitData.id}_milestone_${milestone}_${Date.now()}.jpg`,
 					});
 					await db.runAsync(
 						`
-							INSERT INTO streak_photos (streak_id, milestone, photo_url, added_date, message)
+							INSERT INTO habit_photos (habit_id, milestone, photo_url, added_date, message)
 							VALUES (?, ?, ?, ?, ?)
-										`,
-						streakData.id,
+						`,
+						habitData.id,
 						milestone,
 						path,
 						Date.now(),
@@ -86,11 +85,8 @@ export default function PolaroidTakePhoto() {
 					);
 				}}
 				onFinish={() => {
-					router.push("/(streak)");
+					router.push("/(habit)");
 				}}
-				note={streakData.note}
-				title={streakData.title}
-				milestone={milestone}
 			/>
 		</ThemedView>
 	);

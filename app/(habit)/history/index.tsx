@@ -1,102 +1,93 @@
-import getDateDiffInDays from "@/helper/getDateDiffInDays";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useRef, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { IconButton } from "react-native-paper";
-import Streak from "../../../type/streak";
 import ConfirmationModal from "@/components/ui/Modal/ConfirmationModal";
-import insertStreakHistory from "@/sql/streak/insertStreakHistory";
-import ModalRestartStreak from "@/components/streak/ModalRestartStreak";
+import insertHabitHistory from "@/sql/habit/insertHabitHistory";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import Habit from "@/type/habit";
+import ModalRestartHabit from "@/components/habit/ModalRestartHabit";
 
 export default function TabTwoScreen() {
 	const db = useSQLiteContext();
-	const [streaks, setStreaks] = useState<Streak[]>([]);
+	const [habits, setHabits] = useState<Habit[]>([]);
 	const [modalConfirmation, setModalConfirmation] = useState(false);
 	const [modalRestart, setModalRestart] = useState(false);
-	const selectedStreakId = useRef(0);
+	const selectedHabitId = useRef(0);
 
 	useFocusEffect(
 		React.useCallback(() => {
 			async function setup() {
-				const result = await db.getAllAsync<Streak>(
-					'SELECT * FROM streak WHERE status != "active"',
+				const result = await db.getAllAsync<Habit>(
+					'SELECT * FROM habit WHERE status != "active"',
 				);
-				setStreaks(result);
+				setHabits(result);
 			}
 			setup();
-			return () => {
-				// Do something when the screen is unfocused
-				// Useful for cleanup functions
-			};
 		}, [db]),
 	);
 
 	const handleDelete = async () => {
-		const streakId = selectedStreakId.current;
-		await db.runAsync("DELETE FROM streak WHERE id = ?", streakId);
+		const habitId = selectedHabitId.current;
+		await db.runAsync("DELETE FROM habit WHERE id = ?", habitId);
 
-		setStreaks((prevStreaks) =>
-			prevStreaks.filter((streak) => streak.id !== streakId),
+		setHabits((prevHabits) =>
+			prevHabits.filter((habit) => habit.id !== habitId),
 		);
 		setModalConfirmation(false);
 	};
 
 	const handleResume = async (note: string) => {
 		const currentDate = new Date().getTime();
-		const streakId = selectedStreakId.current;
+		const habitId = selectedHabitId.current;
 		await db.withTransactionAsync(async () => {
 			await db.runAsync(
-				"UPDATE streak SET status = ?, start_date = ?, current_streak_date = ? WHERE id = ?",
+				"UPDATE habit SET status = ?, start_date = ?, last_active_date = ? WHERE id = ?",
 				"active",
 				currentDate,
 				currentDate,
-				streakId,
+				habitId,
 			);
 
-			await insertStreakHistory({
+			await insertHabitHistory({
 				db,
 				payload: {
 					action_type: "restart",
-					streak_id: streakId,
+					habit_id: habitId,
 					note,
 				},
 			});
 		});
 
-		const result = await db.getAllAsync<Streak>(
-			'SELECT * FROM streak WHERE status != "active"',
+		const result = await db.getAllAsync<Habit>(
+			'SELECT * FROM habit WHERE status != "active"',
 		);
-		setStreaks(result);
+		setHabits(result);
 		setModalRestart(false);
 	};
 	return (
 		<ThemedView style={styles.container}>
-			<ThemedText style={styles.title}>Your streak history!</ThemedText>
-			{streaks.length === 0 ? (
+			<ThemedText style={styles.title}>Your habit history!</ThemedText>
+			{habits.length === 0 ? (
 				<ThemedText style={{ paddingHorizontal: 16 }}>
-					No streaks found
+					No habits found
 				</ThemedText>
 			) : (
 				<View>
-					{streaks.map((streak, index) => {
-						const daysDiff = getDateDiffInDays({
-							startDate: streak.start_date,
-							endDate: streak.current_streak_date,
-						});
+					{habits.map((habit, index) => {
 						return (
 							<View
 								style={{
-									...styles.streakItemContainer,
+									...styles.habitItemContainer,
 									paddingTop: index === 0 ? 0 : undefined,
 								}}
-								key={streak.id}
+								key={habit.id}
 							>
 								<ThemedText style={{ paddingLeft: 8 }}>
-									{streak.title}
+									{habit.title}
 								</ThemedText>
 								<View
 									style={{
@@ -107,7 +98,7 @@ export default function TabTwoScreen() {
 									}}
 								>
 									<ThemedText style={{ textAlign: "right", marginRight: 4 }}>
-										{`${daysDiff.toString()}`}
+										{habit.count}
 									</ThemedText>
 									<ThemedText>
 										<IconButton
@@ -119,7 +110,7 @@ export default function TabTwoScreen() {
 												/>
 											)}
 											onPress={() => {
-												selectedStreakId.current = streak.id;
+												selectedHabitId.current = habit.id;
 												setModalRestart(true);
 											}}
 											style={{ margin: 0, padding: 0, width: 24, height: 24 }}
@@ -135,7 +126,7 @@ export default function TabTwoScreen() {
 											)}
 											onPress={() => {
 												setModalConfirmation(true);
-												selectedStreakId.current = streak.id;
+												selectedHabitId.current = habit.id;
 											}}
 											style={{ margin: 0, padding: 0, width: 24, height: 24 }}
 											size={24}
@@ -147,7 +138,7 @@ export default function TabTwoScreen() {
 					})}
 				</View>
 			)}
-			<ModalRestartStreak
+			<ModalRestartHabit
 				visible={modalRestart}
 				onClose={() => setModalRestart(false)}
 				onConfirm={(note: string) => {
@@ -156,7 +147,7 @@ export default function TabTwoScreen() {
 			/>
 			<ConfirmationModal
 				visible={modalConfirmation}
-				title="Remove streak ?"
+				title="Remove habit ?"
 				description="You can't restore it"
 				onClose={() => setModalConfirmation(false)}
 				onConfirm={() => {
@@ -181,7 +172,7 @@ const styles = StyleSheet.create({
 		paddingTop: 16,
 		height: "100%",
 	},
-	streakItemContainer: {
+	habitItemContainer: {
 		borderBottomWidth: 1,
 		borderBottomColor: "#ccc",
 		marginBottom: 10,

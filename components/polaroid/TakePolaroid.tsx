@@ -11,10 +11,7 @@ import {
 } from "react-native";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
-import { savePhotoToAppStorage } from "@/helper/photoStorge";
-import { useSQLiteContext } from "expo-sqlite";
 import ModalSuccess from "../ui/Modal/ModalSuccess";
-import { router } from "expo-router";
 import {
 	PHOTO_PADDING,
 	POLAROID_HEIGHT,
@@ -22,17 +19,18 @@ import {
 } from "@/constants/Polaroid";
 
 export function TakePolaroid({
-	streakId,
+	onSavePhoto,
+	onFinish,
 	note,
 	title,
 	milestone,
 }: {
-	streakId: number;
+	onSavePhoto: (_: { photoUri: string; message: string }) => Promise<void>;
+	onFinish?: () => void;
 	note: string;
 	title: string;
 	milestone: number;
 }) {
-	const db = useSQLiteContext();
 	const initMessage = `I've been doing ${title} for the past ${milestone} days!${note ? ` ${note}` : ""}`;
 	const [facing, setFacing] = useState<CameraType>("back");
 	const [permission, requestPermission] = useCameraPermissions();
@@ -74,26 +72,12 @@ export function TakePolaroid({
 	const savePhoto = async () => {
 		if (!photoUri) return;
 		try {
-			const path = await savePhotoToAppStorage({
-				uri: photoUri,
-				fileName: `streak_${streakId}_milestone_${milestone}_${Date.now()}.jpg`,
-			});
-			await db.runAsync(
-				`
-					INSERT INTO streak_photos (streak_id, milestone, photo_url, added_date, message)
-					VALUES (?, ?, ?, ?, ?)
-				`,
-				streakId,
-				milestone,
-				path,
-				Date.now(),
-				messageRef.current,
-			);
+			await onSavePhoto({ photoUri, message: messageRef.current });
 			setShowModalSuccess(true);
 			setTimeout(() => {
 				messageRef.current = "";
-				setPhotoUri(null)
-				router.push("/(streak)");
+				setPhotoUri(null);
+				onFinish?.();
 				setShowModalSuccess(false);
 			}, 2000);
 		} catch (err) {

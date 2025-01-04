@@ -26,7 +26,7 @@ export default function Home() {
 	const [modalConfirmStreak, setModalConfirmStreak] = useState(false);
 	const [modalFailed, setModalFailed] = useState(false);
 	const [modalConfirmation, setModalConfirmation] = useState(false);
-	const [modalConfirmPhoto, setrModalConfirmPhoto] = useState(false);
+	const [modalConfirmPhoto, setModalConfirmPhoto] = useState(false);
 	const [selectedStreak, setSelectedStreak] = useState<Streak | null>(null);
 	const selectedStreakId = useRef(0);
 	const { createNotification, removeNotification } = useStreakNotification();
@@ -104,7 +104,7 @@ export default function Home() {
 			});
 
 			if (daysDiff % 5 === 0) {
-				setrModalConfirmPhoto(true);
+				setModalConfirmPhoto(true);
 				setSelectedStreak(streak);
 				return;
 			}
@@ -127,9 +127,14 @@ export default function Home() {
 			});
 		});
 
-		setStreaks((prevStreaks) =>
-			prevStreaks.filter((streak) => streak.id !== streakId),
-		);
+		setStreaks((prevStreaks) => {
+			const newStreak = prevStreaks.filter((streak) => streak.id !== streakId);
+
+			if (newStreak.length === 0) {
+				removeNotification();
+			}
+			return newStreak;
+		});
 		setModalConfirmation(false);
 	};
 
@@ -261,7 +266,7 @@ export default function Home() {
 				<ModalAskPolaroid
 					visible={modalConfirmPhoto}
 					onClose={() => {
-						setrModalConfirmPhoto(false);
+						setModalConfirmPhoto(false);
 						setSelectedStreak(null);
 					}}
 					streak={selectedStreak}

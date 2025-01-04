@@ -50,6 +50,12 @@ export default [
 			// Suppress TypeScript-specific warning for React UMD global
 			'react/jsx-uses-react': 'off',
 			'react/jsx-uses-vars': 'warn',
+			'no-console': [
+				'warn',
+				{
+					allow: ['error', 'warn'], // Warn for console.log, but allow console.error and console.warn
+				},
+			],
 		},
 	},
 ];
