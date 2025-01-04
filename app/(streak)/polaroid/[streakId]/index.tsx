@@ -8,6 +8,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { useStack } from "@/providers/StackProviders";
 import { TakePolaroid } from "@/components/polaroid/TakePolaroid";
 import { savePhotoToAppStorage } from "@/helper/photoStorge";
+import { useTranslation } from "react-i18next";
 
 type StreakWithNote = Omit<Streak, "status"> & {
 	action_date: number;
@@ -17,7 +18,7 @@ export default function PolaroidTakePhoto() {
 	const { action } = useStack();
 	const { streakId } = useLocalSearchParams();
 	const db = useSQLiteContext();
-
+	const { t } = useTranslation();
 	const [streakData, setStreakData] = useState<StreakWithNote | null>(null);
 	const fetchStreak = async () => {
 		const streak = await db.getAllAsync<StreakWithNote>(
@@ -88,9 +89,10 @@ export default function PolaroidTakePhoto() {
 				onFinish={() => {
 					router.push("/(streak)");
 				}}
-				note={streakData.note}
-				title={streakData.title}
-				milestone={milestone}
+				initMessage={`${t("polaroid.initMessage", {
+					title: streakData.title,
+					milestone,
+				})}${streakData.note ? ` ${streakData.note}` : ""}`}
 			/>
 		</ThemedView>
 	);

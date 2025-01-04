@@ -1,7 +1,10 @@
+import { LanguageSelector } from "@/components/LanguageSelector";
 import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
 	View,
 	StyleSheet,
@@ -12,49 +15,53 @@ import {
 
 export default function Home() {
 	const theme = useColorScheme() ?? "light";
+	const { t } = useTranslation();
+	
 	const borderColor =
 		theme === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
 	return (
-		<View style={styles.container}>
-			<View style={styles.topSection}>
-				{/* Streak Section */}
-				<Link href="/(streak)">
-					<View style={styles.section}>
-						<View
-							style={{
-								...styles.logoContainer,
-								borderColor,
-							}}
-						>
-							<MaterialIcons
-								name="whatshot"
-								size={32}
-								color={theme === "dark" ? "white" : "black"}
-							/>
+		<>
+			<ThemedView style={styles.container}>
+				<View style={styles.topSection}>
+					<Link href="/(streak)">
+						<View style={styles.section}>
+							<View
+								style={{
+									...styles.logoContainer,
+									borderColor,
+								}}
+							>
+								<MaterialIcons
+									name="whatshot"
+									size={32}
+									color={theme === "dark" ? "white" : "black"}
+								/>
+							</View>
+							<ThemedText>{t("streak.title")}</ThemedText>
 						</View>
-						<ThemedText>Streak</ThemedText>
-					</View>
-				</Link>
+					</Link>
 
-				<Link href="/(habit)">
-					<View style={styles.section}>
-						<View
-							style={{
-								...styles.logoContainer,
-								borderColor,
-							}}
-						>
-							<MaterialIcons
-								name="local-activity"
-								size={24}
-								color={theme === "dark" ? "white" : "black"}
-							/>
+					<Link href="/(habit)">
+						<View style={styles.section}>
+							<View
+								style={{
+									...styles.logoContainer,
+									borderColor,
+								}}
+							>
+								<MaterialIcons
+									name="local-activity"
+									size={24}
+									color={theme === "dark" ? "white" : "black"}
+								/>
+							</View>
+							<ThemedText>{t("habit.title")}</ThemedText>
 						</View>
-						<ThemedText>Habit</ThemedText>
-					</View>
-				</Link>
-			</View>
-		</View>
+					</Link>
+				</View>
+			</ThemedView>
+			<LanguageSelector />
+		</>
 	);
 }
 

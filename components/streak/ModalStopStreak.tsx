@@ -1,5 +1,6 @@
 import ConfirmationModal from "@/components/ui/Modal/ConfirmationModal";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, TextInput, View } from "react-native";
 
 export default function ModalStopStreak({
@@ -11,6 +12,7 @@ export default function ModalStopStreak({
 	onClose: () => void;
 	onConfirm: (_: string) => void;
 }) {
+	const { t } = useTranslation();
 	const note = useRef("");
 
 	const closeModal = () => {
@@ -25,18 +27,18 @@ export default function ModalStopStreak({
 	return (
 		<ConfirmationModal
 			visible={visible}
-			title="Stop streak ?"
-			description="It will be moved to your history"
+			title={t("streak.modalStop.title")}
+			description={t("streak.modalStop.description")}
 			onClose={closeModal}
 			onConfirm={confirmStop}
-			confirmText="Stop!"
+			confirmText={t("streak.modalStop.confirm")}
 		>
 			<View style={styles.inputContainer}>
 				<TextInput
 					editable
 					multiline
 					numberOfLines={4}
-					placeholder="Add a note (optional)"
+					placeholder={t("streak.modalStop.placeholder")}
 					placeholderTextColor="#666"
 					onChangeText={(text) => {
 						note.current = text;

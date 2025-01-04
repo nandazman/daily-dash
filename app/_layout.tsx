@@ -14,6 +14,7 @@ import { PaperProvider } from "react-native-paper";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "react-native";
 import { useNotificationObserver } from "@/hooks/useNotificationObserver";
+import { useInitLanguage } from "@/hooks/useInitLanguage";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -24,7 +25,7 @@ export default function RootLayout() {
 		SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
 	});
 	useNotificationObserver();
-
+	useInitLanguage();
 	useEffect(() => {
 		if (loaded) {
 			SplashScreen.hideAsync();

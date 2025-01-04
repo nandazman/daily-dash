@@ -17,28 +17,24 @@ import {
 	POLAROID_HEIGHT,
 	POLAROID_WIDTH,
 } from "@/constants/Polaroid";
+import { useTranslation } from "react-i18next";
 
 export function TakePolaroid({
 	onSavePhoto,
 	onFinish,
-	note,
-	title,
-	milestone,
+	initMessage,
 }: {
 	onSavePhoto: (_: { photoUri: string; message: string }) => Promise<void>;
 	onFinish?: () => void;
-	note: string;
-	title: string;
-	milestone: number;
+	initMessage: string;
 }) {
-	const initMessage = `I've been doing ${title} for the past ${milestone} days!${note ? ` ${note}` : ""}`;
 	const [facing, setFacing] = useState<CameraType>("back");
 	const [permission, requestPermission] = useCameraPermissions();
 	const cameraRef = useRef<CameraView | null>(null);
 	const messageRef = useRef(initMessage);
 	const [photoUri, setPhotoUri] = useState<string | null>(null);
 	const [showModalSuccess, setShowModalSuccess] = useState(false);
-
+	const { t } = useTranslation();
 	if (!permission) {
 		// Camera permissions are still loading.
 		return <View />;
@@ -147,7 +143,7 @@ export function TakePolaroid({
 				</View>
 			</View>
 			<ModalSuccess
-				message="Photo has been saved!"
+				message={t("polaroid.success")}
 				visible={showModalSuccess}
 				onClose={() => {
 					setShowModalSuccess(false);

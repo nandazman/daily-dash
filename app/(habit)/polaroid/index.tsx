@@ -6,9 +6,11 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { PolaroidView } from "@/components/polaroid/PolaroidView";
 import { HabitPhoto } from "@/type/habitPhoto";
+import { useTranslation } from "react-i18next";
 
 export default function TabTwoScreen() {
 	const db = useSQLiteContext();
+	const { t } = useTranslation();
 	const [habits, setHabits] = useState<HabitPhoto[]>([]);
 
 	useFocusEffect(
@@ -28,10 +30,12 @@ export default function TabTwoScreen() {
 	);
 	return (
 		<ThemedView style={styles.container}>
-			<ThemedText style={styles.title}>Your memorable polaroid!</ThemedText>
+			<ThemedText style={styles.title}>
+				{t("habit.polaroid.heading")}
+			</ThemedText>
 			{!habits.length && (
 				<ThemedText style={{ paddingHorizontal: 16 }}>
-					You don't have any memories yet. Keep doing your habit to unlock!
+					{t("habit.polaroid.empty")}
 				</ThemedText>
 			)}
 

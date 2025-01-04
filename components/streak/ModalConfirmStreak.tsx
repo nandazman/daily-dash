@@ -1,14 +1,9 @@
-
 import { useRef, useState } from "react";
 import ModalWrapper from "../ui/Modal/ModalWrapper";
 
-import {
-	ActivityIndicator,
-	StyleSheet,
-	TextInput,
-	View,
-} from "react-native";
+import { ActivityIndicator, StyleSheet, TextInput, View } from "react-native";
 import { ThemedButton } from "../ThemedButton";
+import { useTranslation } from "react-i18next";
 
 export default function ModalConfirmStreak({
 	visible,
@@ -19,6 +14,7 @@ export default function ModalConfirmStreak({
 	onClose: () => void;
 	onConfirm: (_: string) => Promise<void>;
 }) {
+	const { t } = useTranslation();
 	const note = useRef("");
 	const [loading, setLoading] = useState(false);
 	const closeModal = () => {
@@ -34,7 +30,11 @@ export default function ModalConfirmStreak({
 	};
 
 	return (
-		<ModalWrapper title="Going Great ?" visible={visible} onClose={closeModal}>
+		<ModalWrapper
+			title={t("streak.modalConfirm.title")}
+			visible={visible}
+			onClose={closeModal}
+		>
 			<TextInput
 				editable
 				multiline
@@ -43,12 +43,12 @@ export default function ModalConfirmStreak({
 					note.current = text;
 				}}
 				style={styles.textInput}
-				placeholder="Optional"
+				placeholder={t("streak.modalConfirm.placeholder")}
 			/>
 			<View style={styles.modalActions}>
 				<View style={styles.buttonStyle}>
 					<ThemedButton
-						title="Cancel"
+						title={t("common.cancel")}
 						onPress={closeModal}
 						disabled={loading}
 						type="transparent"
@@ -60,7 +60,7 @@ export default function ModalConfirmStreak({
 					) : (
 						<ThemedButton
 							type="confirmation"
-							title="Procced!"
+							title={t("streak.modalConfirm.confirm")}
 							onPress={updateStreak}
 						/>
 					)}
@@ -94,6 +94,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	buttonStyle: {
-		flex: 1
-	}
+		flex: 1,
+	},
 });

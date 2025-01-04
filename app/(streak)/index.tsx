@@ -18,6 +18,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import ModalAskPolaroid from "@/components/streak/ModalAskPolaroid";
 import { useStreakNotification } from "@/hooks/useStreakNotification";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
 	const db = useSQLiteContext();
@@ -30,7 +31,7 @@ export default function Home() {
 	const [selectedStreak, setSelectedStreak] = useState<Streak | null>(null);
 	const selectedStreakId = useRef(0);
 	const { createNotification, removeNotification } = useStreakNotification();
-
+	const { t } = useTranslation();
 	const fetchStreak = async () => {
 		const streaks = await db.getAllAsync<Streak>(
 			'SELECT * FROM streak WHERE status = "active"',
@@ -142,11 +143,11 @@ export default function Home() {
 		<>
 			<ThemedView style={styles.container}>
 				<ThemedText style={styles.title}>
-					How does your streak go? <HelloWave />
+					{t("streak.home.heading")} <HelloWave />
 				</ThemedText>
 				{streaks.length === 0 ? (
 					<ThemedText style={{ paddingHorizontal: 16 }}>
-						No streaks found
+						{t("streak.home.empty")}
 					</ThemedText>
 				) : (
 					<View>
@@ -179,7 +180,7 @@ export default function Home() {
 										}}
 									>
 										<ThemedText style={{ textAlign: "right", marginRight: 4 }}>
-											{isActive ? daysDiff.toString() : "FAIL"}
+											{isActive ? daysDiff.toString() : t("streak.home.fail")}
 										</ThemedText>
 										<ThemedText>
 											<IconButton

@@ -1,0 +1,113 @@
+{
+    "streak": {
+        "title": "Runtutan",
+        "home": {
+            "heading": "Bagaimana runtutan kamu?",
+            "empty": "Tidak ada runtutan ditemukan",
+            "fail": "Gagal"
+        },
+        "modalFailed": {
+            "title": "😢 {{count}} Runtutan Gagal",
+            "text": "Runtutan di atas telah tidak aktif selama lebih dari 2 hari. Runtutan akan dihapus dari daftar aktif dan ditambahkan ke halaman riwayat."
+        },
+        "modalAdd": {
+            "title": "Runtutan Berikutnya!",
+            "confirm": "Mulai Runtutan!",
+            "placeholder": "Nama runtutan"
+        },
+        "modalStop": {
+            "title": "Hentikan runtutan?",
+            "description": "Ini akan dipindahkan ke riwayat Anda",
+            "placeholder": "Tambahkan catatan (opsional)",
+            "confirm": "Hentikan!"
+        },
+        "modalConfirm": {
+            "title": "Berjalan Baik?",
+            "confirm": "Lanjutkan!",
+            "placeholder": "Tambahkan catatan (opsional)"
+        },
+        "modalPolaroid": {
+            "title": "Selamat!",
+            "description": "Anda telah melakukan {{title}} selama {{days}} hari terakhir. Apakah Anda ingin mengambil foto?",
+            "confirm": "Ambil Foto!",
+            "cancel": "Nanti saja"
+        },
+        "notification": {
+            "title": "Pembaruan runtutan",
+            "body": "Anda belum memperbarui runtutan Anda hari ini! Mari perbarui progres Anda!"
+        },
+        "history": {
+            "heading": "Riwayat runtutan Anda!",
+            "empty": "Tidak ada runtutan ditemukan",
+            "deletTitle": "Hapus runtutan?",
+            "deleteDescription": "Anda tidak dapat memulihkannya",
+            "deleteConfirm": "Hapus!"
+        },
+        "modalResume": {
+            "title": "Lanjutkan runtutan?",
+            "description": "Runtutan ini akan kembali ke beranda Anda",
+            "confirm": "Lanjut!"
+        },
+        "polaroid": {
+            "heading": "Polaroid kenangan Anda!",
+            "empty": "Anda belum memiliki kenangan. Terus lakukan runtutan Anda untuk membukanya!"
+        }
+    },
+    "habit": {
+        "title": "Kebiasaan",
+        "home": {
+            "heading": "Bagaimana kebiasaan Anda?",
+            "empty": "Tidak ada kebiasaan ditemukan"
+        },
+        "modalAdd": {
+            "title": "Kebiasaan untuk Dibuat!",
+            "confirm": "Bangun Kebiasaan!",
+            "placeholder": "Nama kebiasaan"
+        },
+        "modalStop": {
+            "title": "Hentikan kebiasaan?",
+            "description": "Ini akan dipindahkan ke riwayat Anda",
+            "placeholder": "Tambahkan catatan (opsional)",
+            "confirm": "Hentikan!"
+        },
+        "modalConfirm": {
+            "title": "Berjalan Baik?",
+            "confirm": "Lanjutkan!",
+            "placeholder": "Tambahkan catatan (opsional)"
+        },
+        "modalPolaroid": {
+            "title": "Selamat!",
+            "description": "Anda telah melakukan {{title}} selama {{days}} hari terakhir. Apakah Anda ingin mengambil foto?",
+            "confirm": "Ambil Foto!",
+            "cancel": "Nanti saja"
+        },
+        "notification": {
+            "title": "Pembaruan kebiasaan",
+            "body": "Bagaimana kebiasaan Anda? Mari perbarui progres Anda!"
+        },
+        "history": {
+            "heading": "Riwayat kebiasaan Anda!",
+            "empty": "Tidak ada kebiasaan ditemukan",
+            "deletTitle": "Hapus kebiasaan?",
+            "deleteDescription": "Anda tidak dapat memulihkannya",
+            "deleteConfirm": "Hapus!"
+        },
+        "modalResume": {
+            "title": "Lanjutkan kebiasaan?",
+            "description": "Kebiasaan ini akan kembali ke beranda Anda",
+            "confirm": "Lanjut!"
+        },
+        "polaroid": {
+            "heading": "Polaroid kenangan Anda!",
+            "empty": "Anda belum memiliki kenangan. Terus lakukan kebiasaan Anda untuk membukanya!"
+        }
+    },
+    "common": {
+        "cancel": "Batal",
+        "confirm": "Konfirmasi"
+    },
+    "polaroid": {
+        "success": "Foto telah disimpan!",
+        "initMessage": "Saya telah melakukan {{title}} selama {{days}} hari terakhir!"
+    }
+}

@@ -15,9 +15,11 @@ import ModalConfirmHabit from "@/components/habit/ModalConfirmHabit";
 import ModalStopHabit from "@/components/habit/ModalStopHabit";
 import { useHabitNotification } from "@/hooks/useHabitNotification";
 import ModalAskPolaroid from "@/components/habit/ModalAskPolaroid";
+import { useTranslation } from "react-i18next";
 
 export default function HabitHome() {
 	const db = useSQLiteContext();
+	const { t } = useTranslation();
 	const [habits, setHabit] = useState<Habit[]>([]);
 	const [isShowModalAdd, setShowModalAdd] = useState(false);
 	const [isShowModalConfirm, setShowModalConfirm] = useState(false);
@@ -102,11 +104,11 @@ export default function HabitHome() {
 		<>
 			<ThemedView style={styles.container}>
 				<ThemedText style={styles.title}>
-					How is your habits going? <HelloWave />
+					{t("habit.home.heading")} <HelloWave />
 				</ThemedText>
 				{habits.length === 0 ? (
 					<ThemedText style={{ paddingHorizontal: 16 }}>
-						No habits found
+						{t("habit.home.empty")}
 					</ThemedText>
 				) : (
 					<View>

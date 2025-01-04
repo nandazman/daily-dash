@@ -1,8 +1,10 @@
 import * as Notifications from 'expo-notifications';
 import { useNotification } from './useNotification';
+import { useTranslation } from 'react-i18next';
 
 
 export function useHabitNotification() {
+	const { t } = useTranslation();
 	const { pushNotification } = useNotification();
 
 	const createNotification = async () => {
@@ -12,8 +14,8 @@ export function useHabitNotification() {
 		}
 		pushNotification({
 			content: {
-				title: "Habit update",
-				body: "How's your habit going? Let's update your progress!",
+				title: t("habit.notification.title"),
+				body: t("habit.notification.body"),
 				data: { type: "habit", url: "/(habit)" },
 			},
 			trigger: {

@@ -1,5 +1,6 @@
 import ConfirmationModal from "@/components/ui/Modal/ConfirmationModal";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function ModalRestartHabit({
 	visible,
@@ -10,6 +11,7 @@ export default function ModalRestartHabit({
 	onClose: () => void;
 	onConfirm: (_: string) => void;
 }) {
+	const { t } = useTranslation();
 	const note = useRef("");
 
 	const closeModal = () => {
@@ -24,11 +26,11 @@ export default function ModalRestartHabit({
 	return (
 		<ConfirmationModal
 			visible={visible}
-			title="Resume habit ?"
-			description="This habit will return to your home"
+			title={t("habit.modalResume.title")}
+			description={t("habit.modalResume.description")}
 			onClose={closeModal}
 			onConfirm={confirmStop}
-			confirmText="Go!"
+			confirmText={t("habit.modalResume.confirm")}
 		/>
 	);
 }

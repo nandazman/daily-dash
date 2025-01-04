@@ -5,6 +5,7 @@ import { ThemedText } from "../ThemedText";
 import { ThemedButton } from "../ThemedButton";
 import { router } from "expo-router";
 import Habit from "@/type/habit";
+import { useTranslation } from "react-i18next";
 
 export default function ModalAskPolaroid({
 	visible,
@@ -15,22 +16,33 @@ export default function ModalAskPolaroid({
 	onClose: () => void;
 	habit: Habit;
 }) {
+	const { t } = useTranslation();
 	return (
-		<ModalWrapper title="Congratulations!" visible={visible} onClose={onClose}>
+		<ModalWrapper
+			title={t("streak.modalPolaroid.title")}
+			visible={visible}
+			onClose={onClose}
+		>
 			<ThemedText>
-				You have been doing {habit.title} for {habit.count} days. Would you like
-				to take photo of it ?
+				{t("streak.modalPolaroid.description", {
+					title: habit.title,
+					days: habit.count,
+				})}
 			</ThemedText>
 			<View style={styles.modalActions}>
 				<View style={styles.buttonStyle}>
-					<ThemedButton title="Not now" onPress={onClose} type="transparent" />
+					<ThemedButton
+						title={t("streak.modalPolaroid.cancel")}
+						onPress={onClose}
+						type="transparent"
+					/>
 				</View>
 				<View style={styles.saveButtonContainer}>
 					<ThemedButton
 						type="confirmation"
-						title="Take Picture!"
+						title={t("streak.modalPolaroid.confirm")}
 						onPress={() => {
-							router.replace(`/(habit)/polaroid/${habit.id}`);
+							router.replace(`/(streak)/polaroid/${habit.id}`);
 							onClose();
 						}}
 					/>

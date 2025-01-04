@@ -3,6 +3,7 @@ import Streak from "@/type/streak";
 import { ScrollView, View } from "react-native";
 import { ThemedText } from "../ThemedText";
 import { ThemedButton } from "../ThemedButton";
+import { useTranslation } from "react-i18next";
 
 export default function ModalFailedStreak({
 	visible,
@@ -14,11 +15,12 @@ export default function ModalFailedStreak({
 	streaks: Streak[];
 }) {
 	const failedStreak = streaks.filter((item) => item.status !== "active");
+	const { t } = useTranslation();
 	return (
 		<ModalWrapper
 			visible={visible}
 			onClose={onClose}
-			title={`😢 ${failedStreak.length} Failed Streaks`}
+			title={t("streak.modalFailed.title", { count: failedStreak.length })}
 		>
 			<ScrollView contentContainerStyle={{ paddingBottom: 0 }}>
 				{failedStreak.map((item, index) => (
@@ -30,8 +32,7 @@ export default function ModalFailedStreak({
 				))}
 			</ScrollView>
 			<ThemedText style={{ marginBottom: 16 }}>
-				The above streaks have been inactive for more than 2 days. They will be
-				removed from active streaks and added to the history page.
+				{t("streak.modalFailed.text")}
 			</ThemedText>
 			<ThemedButton type="info" onPress={onClose} title="Acknowledge" />
 		</ModalWrapper>

@@ -1,5 +1,6 @@
 import ConfirmationModal from "@/components/ui/Modal/ConfirmationModal";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function ModalRestartStreak({
 	visible,
@@ -10,6 +11,7 @@ export default function ModalRestartStreak({
 	onClose: () => void;
 	onConfirm: (_: string) => void;
 }) {
+	const { t } = useTranslation();
 	const note = useRef("");
 
 	const closeModal = () => {
@@ -24,11 +26,11 @@ export default function ModalRestartStreak({
 	return (
 		<ConfirmationModal
 			visible={visible}
-			title="Resume streak ?"
-			description="This streak will return to your home"
+			title={t("streak.modalResume.title")}
+			description={t("streak.modalResume.description")}
 			onClose={closeModal}
 			onConfirm={confirmStop}
-			confirmText="Go!"
+			confirmText={t("streak.modalResume.confirm")}
 		/>
 	);
 }

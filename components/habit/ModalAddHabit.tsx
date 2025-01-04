@@ -3,6 +3,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet, TextInput, View } from "react-native";
 import { ThemedButton } from "../ThemedButton";
+import { useTranslation } from "react-i18next";
 
 export default function ModalAddHabit({
 	visible,
@@ -13,6 +14,7 @@ export default function ModalAddHabit({
 	onClose: () => void;
 	onFinishSave: () => void;
 }) {
+	const { t } = useTranslation();
 	const db = useSQLiteContext();
 	const habitName = useRef("");
 	const [loading, setLoading] = useState(false);
@@ -51,7 +53,7 @@ export default function ModalAddHabit({
 		>
 			<TextInput
 				style={styles.input}
-				placeholder="Name of the habit"
+				placeholder={t("habit.modalAdd.title")}
 				onChangeText={(text) => {
 					habitName.current = text;
 				}}
@@ -59,7 +61,7 @@ export default function ModalAddHabit({
 			<View style={styles.modalActions}>
 				<View style={{ flex: 1 }}>
 					<ThemedButton
-						title="Cancel"
+						title={t("common.cancel")}
 						onPress={closeModal}
 						disabled={loading}
 						type="transparent"
@@ -71,7 +73,7 @@ export default function ModalAddHabit({
 					) : (
 						<ThemedButton
 							type="confirmation"
-							title="Build Habit!"
+							title={t("habit.modalAdd.confirm")}
 							onPress={handleSave}
 						/>
 					)}

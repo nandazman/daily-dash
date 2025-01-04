@@ -11,9 +11,11 @@ import insertStreakHistory from "@/sql/streak/insertStreakHistory";
 import ModalRestartStreak from "@/components/streak/ModalRestartStreak";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { useTranslation } from "react-i18next";
 
 export default function TabTwoScreen() {
 	const db = useSQLiteContext();
+	const { t } = useTranslation();
 	const [streaks, setStreaks] = useState<Streak[]>([]);
 	const [modalConfirmation, setModalConfirmation] = useState(false);
 	const [modalRestart, setModalRestart] = useState(false);
@@ -28,10 +30,6 @@ export default function TabTwoScreen() {
 				setStreaks(result);
 			}
 			setup();
-			return () => {
-				// Do something when the screen is unfocused
-				// Useful for cleanup functions
-			};
 		}, [db]),
 	);
 
@@ -75,10 +73,12 @@ export default function TabTwoScreen() {
 	};
 	return (
 		<ThemedView style={styles.container}>
-			<ThemedText style={styles.title}>Your streak history!</ThemedText>
+			<ThemedText style={styles.title}>
+				{t("streak.history.heading")}
+			</ThemedText>
 			{streaks.length === 0 ? (
 				<ThemedText style={{ paddingHorizontal: 16 }}>
-					No streaks found
+					{t("streak.history.empty")}
 				</ThemedText>
 			) : (
 				<View>
@@ -156,13 +156,13 @@ export default function TabTwoScreen() {
 			/>
 			<ConfirmationModal
 				visible={modalConfirmation}
-				title="Remove streak ?"
-				description="You can't restore it"
+				title={t("streak.history.deletTitle")}
+				description={t("streak.history.deleteDescription")}
 				onClose={() => setModalConfirmation(false)}
 				onConfirm={() => {
 					handleDelete();
 				}}
-				confirmText="Delete!"
+				confirmText={t("streak.history.deleteConfirm")}
 			/>
 		</ThemedView>
 	);

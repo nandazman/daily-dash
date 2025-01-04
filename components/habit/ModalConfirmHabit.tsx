@@ -3,6 +3,7 @@ import ModalWrapper from "../ui/Modal/ModalWrapper";
 
 import { ActivityIndicator, StyleSheet, TextInput, View } from "react-native";
 import { ThemedButton } from "../ThemedButton";
+import { useTranslation } from "react-i18next";
 
 export default function ModalConfirmHabit({
 	visible,
@@ -13,6 +14,7 @@ export default function ModalConfirmHabit({
 	onClose: () => void;
 	onConfirm: (_: string) => Promise<void>;
 }) {
+	const { t } = useTranslation();
 	const note = useRef("");
 	const [loading, setLoading] = useState(false);
 	const closeModal = () => {
@@ -28,7 +30,11 @@ export default function ModalConfirmHabit({
 	};
 
 	return (
-		<ModalWrapper title="Going Great ?" visible={visible} onClose={closeModal}>
+		<ModalWrapper
+			title={t("habit.modalConfirm.title")}
+			visible={visible}
+			onClose={closeModal}
+		>
 			<TextInput
 				editable
 				multiline
@@ -37,12 +43,12 @@ export default function ModalConfirmHabit({
 					note.current = text;
 				}}
 				style={styles.textInput}
-				placeholder="Optional"
+				placeholder={t("habit.modalConfirm.placeholder")}
 			/>
 			<View style={styles.modalActions}>
 				<View style={styles.buttonStyle}>
 					<ThemedButton
-						title="Cancel"
+						title={t("common.cancel")}
 						onPress={closeModal}
 						disabled={loading}
 						type="transparent"
@@ -54,7 +60,7 @@ export default function ModalConfirmHabit({
 					) : (
 						<ThemedButton
 							type="confirmation"
-							title="Procced!"
+							title={t("habit.modalConfirm.confirm")}
 							onPress={updateHabit}
 						/>
 					)}

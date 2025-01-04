@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import ModalWrapper from "./ModalWrapper";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedButton } from "@/components/ThemedButton";
+import { useTranslation } from "react-i18next";
 
 type ConfirmModalProps = {
 	visible: boolean;
@@ -20,9 +21,10 @@ export default function ConfirmationModal({
 	description,
 	onClose,
 	onConfirm,
-	confirmText = "Confirm",
+	confirmText,
 	children,
 }: ConfirmModalProps) {
+	const { t } = useTranslation();
 	return (
 		<ModalWrapper visible={visible} title={title} onClose={onClose}>
 			<View>
@@ -30,11 +32,15 @@ export default function ConfirmationModal({
 				{children}
 				<View style={styles.buttonContainer}>
 					<View style={styles.button}>
-						<ThemedButton title="Cancel" type="transparent" onPress={onClose} />
+						<ThemedButton
+							title={t("common.cancel")}
+							type="transparent"
+							onPress={onClose}
+						/>
 					</View>
 					<View style={styles.button}>
 						<ThemedButton
-							title={confirmText}
+							title={confirmText || t("common.confirm")}
 							onPress={onConfirm}
 							type="confirmation"
 						/>

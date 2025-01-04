@@ -1,0 +1,113 @@
+{
+    "streak": {
+        "title": "Streak",
+        "home": {
+            "heading": "How does your streak go?",
+            "empty": "No streaks found",
+            "fail": "Fail"
+        },
+        "modalFailed": {
+            "title": "😢 {{count}} Failed Streaks",
+            "text": "The above streaks have been inactive for more than 2 days. They will be removed from active streaks and added to the history page."
+        },
+        "modalAdd": {
+            "title": "Streak to Break Next!",
+            "confirm": "Let's Streak!",
+            "placeholder": "Name of the streak"
+        },
+        "modalStop": {
+            "title": "Stop streak ?",
+            "description": "It will be moved to your history",
+            "placeholder": "Add a note (optional)",
+            "confirm": "Stop!"
+        },
+        "modalConfirm": {
+            "title": "Going Great ?",
+            "confirm": "Procced!",
+            "placeholder": "Add a note (optional)"
+        },
+        "modalPolaroid": {
+            "title": "Congratulations!",
+            "description": "You have been doing {{title}} for the last {{days}} days. Would you like to take photo of it ?",
+            "confirm": "Take Picture!",
+            "cancel": "Not now"
+        },
+        "notification": {
+            "title": "Streak update",
+            "body": "You haven't updated your current streak today! Let's update your progress!"
+        },
+        "history": {
+            "heading": "Your streak history!",
+            "empty": "No streaks found",
+            "deletTitle": "Remove streak ?",
+            "deleteDescription": "You can't restore it",
+            "deleteConfirm": "Delete!"
+        },
+        "modalResume": {
+            "title": "Resume streak ?",
+            "description": "This streak will return to your home",
+            "confirm": "Go!"
+        },
+        "polaroid": {
+            "heading": "Your memorable polaroid!",
+            "empty": "You don't have any memories yet. Keep doing your streak to unlock!"
+        }
+    },
+    "habit": {
+        "title": "Habit",
+        "home": {
+            "heading": "How is your habits going?",
+            "empty": "No habits found"
+        },
+        "modalAdd": {
+            "title": "Habit to Create!",
+            "confirm": "Build Habit!",
+            "placeholder": "Name of the habit"
+        },
+        "modalStop": {
+            "title": "Stop habit ?",
+            "description": "It will be moved to your history",
+            "placeholder": "Add a note (optional)",
+            "confirm": "Stop!"
+        },
+        "modalConfirm": {
+            "title": "Going Great ?",
+            "confirm": "Procced!",
+             "placeholder": "Add a note (optional)"
+        },
+         "modalPolaroid": {
+            "title": "Congratulations!",
+            "description": "You have been doing {{title}} for the last {{days}} days. Would you like to take photo of it ?",
+            "confirm": "Take Picture!",
+            "cancel": "Not now"
+        },
+        "notification": {
+            "title": "Habit update",
+            "body":  "How's your habit going? Let's update your progress!"
+        },
+        "history": {
+            "heading": "Your habit history!",
+            "empty": "No habits found",
+            "deletTitle": "Remove habit ?",
+            "deleteDescription": "You can't restore it",
+            "deleteConfirm": "Delete!"
+        },
+         "modalResume": {
+            "title": "Resume habit ?",
+            "description": "This habit will return to your home",
+            "confirm": "Go!"
+        },
+        "polaroid": {
+            "heading": "Your memorable polaroid!",
+            "empty": "You don't have any memories yet. Keep doing your habit to unlock!"
+        }
+    },
+    "common": {
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+    },
+    "polaroid": {
+        "success": "Photo has been saved!",
+        "initMessage": "`I've been doing {{title}} for the past {{days}} days!"
+    }
+}

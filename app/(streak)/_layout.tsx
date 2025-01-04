@@ -8,13 +8,14 @@ import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { StackProviders } from "@/providers/StackProviders";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 export default function TabLayout() {
 	const colorScheme = useColorScheme() ?? "light";
 	const navigation = useNavigation();
-
+	const { t } = useTranslation();
 	useEffect(() => {
-		navigation.setOptions({ title: "Streak" });
+		navigation.setOptions({ title: t("streak.title") });
 	}, [navigation]);
 
 	return (

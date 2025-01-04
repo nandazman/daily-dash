@@ -7,6 +7,7 @@ import { useStack } from "@/providers/StackProviders";
 import { TakePolaroid } from "@/components/polaroid/TakePolaroid";
 import Habit from "@/type/habit";
 import { savePhotoToAppStorage } from "@/helper/photoStorge";
+import { useTranslation } from "react-i18next";
 
 type HabitWithNote = Omit<Habit, "status"> & {
 	action_date: number;
@@ -16,7 +17,7 @@ export default function PolaroidTakePhoto() {
 	const { action } = useStack();
 	const { habitId } = useLocalSearchParams();
 	const db = useSQLiteContext();
-
+	const { t } = useTranslation();
 	const [habitData, setHabitData] = useState<HabitWithNote | null>(null);
 	const fetchHabit = async () => {
 		const habit = await db.getAllAsync<HabitWithNote>(
@@ -64,9 +65,10 @@ export default function PolaroidTakePhoto() {
 	return (
 		<ThemedView style={styles.container}>
 			<TakePolaroid
-				note={habitData.note}
-				title={habitData.title}
-				milestone={milestone}
+				initMessage={`${t("polaroid.initMessage", {
+					title: habitData.title,
+					milestone,
+				})}${habitData.note ? ` ${habitData.note}` : ""}`}
 				onSavePhoto={async ({ photoUri, message }) => {
 					const path = await savePhotoToAppStorage({
 						uri: photoUri,

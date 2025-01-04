@@ -6,10 +6,12 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { PolaroidView } from "@/components/polaroid/PolaroidView";
 import { StreakPhoto } from "@/type/streakPhotos";
+import { useTranslation } from "react-i18next";
 
 export default function TabTwoScreen() {
 	const db = useSQLiteContext();
 	const [streaks, setStreaks] = useState<StreakPhoto[]>([]);
+	const { t } = useTranslation();
 
 	useFocusEffect(
 		React.useCallback(() => {
@@ -28,10 +30,12 @@ export default function TabTwoScreen() {
 	);
 	return (
 		<ThemedView style={styles.container}>
-			<ThemedText style={styles.title}>Your memorable polaroid!</ThemedText>
+			<ThemedText style={styles.title}>
+				{t("streak.polaroid.heading")}
+			</ThemedText>
 			{!streaks.length && (
 				<ThemedText style={{ paddingHorizontal: 16 }}>
-					You don't have any memories yet. Keep doing your streak to unlock!
+					{t("streak.polaroid.empty")}
 				</ThemedText>
 			)}
 

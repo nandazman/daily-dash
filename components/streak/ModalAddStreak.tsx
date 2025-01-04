@@ -3,6 +3,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet, TextInput, View } from "react-native";
 import { ThemedButton } from "../ThemedButton";
+import { useTranslation } from "react-i18next";
 
 export default function ModalAddStreak({
 	visible,
@@ -13,6 +14,7 @@ export default function ModalAddStreak({
 	onClose: () => void;
 	onFinishSave: () => void;
 }) {
+	const { t } = useTranslation();
 	const db = useSQLiteContext();
 	const streakName = useRef("");
 	const [loading, setLoading] = useState(false);
@@ -45,12 +47,12 @@ export default function ModalAddStreak({
 	return (
 		<ModalWrapper
 			visible={visible}
-			title="Streak to Break Next!"
+			title={t("streak.modalAdd.title")}
 			onClose={closeModal}
 		>
 			<TextInput
 				style={styles.input}
-				placeholder="Name of the streak"
+				placeholder={t("streak.modalAdd.placeholder")}
 				onChangeText={(text) => {
 					streakName.current = text;
 				}}
@@ -58,7 +60,7 @@ export default function ModalAddStreak({
 			<View style={styles.modalActions}>
 				<View style={{ flex: 1 }}>
 					<ThemedButton
-						title="Cancel"
+						title={t("common.cancel")}
 						onPress={closeModal}
 						disabled={loading}
 						type="transparent"
@@ -70,7 +72,7 @@ export default function ModalAddStreak({
 					) : (
 						<ThemedButton
 							type="confirmation"
-							title="Let's Streak!"
+							title={t("streak.modalAdd.confirm")}
 							onPress={handleSave}
 						/>
 					)}

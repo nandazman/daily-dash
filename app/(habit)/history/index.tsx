@@ -10,6 +10,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import Habit from "@/type/habit";
 import ModalRestartHabit from "@/components/habit/ModalRestartHabit";
+import { useTranslation } from "react-i18next";
 
 export default function TabTwoScreen() {
 	const db = useSQLiteContext();
@@ -17,7 +18,7 @@ export default function TabTwoScreen() {
 	const [modalConfirmation, setModalConfirmation] = useState(false);
 	const [modalRestart, setModalRestart] = useState(false);
 	const selectedHabitId = useRef(0);
-
+	const { t } = useTranslation();
 	useFocusEffect(
 		React.useCallback(() => {
 			async function setup() {
@@ -70,10 +71,10 @@ export default function TabTwoScreen() {
 	};
 	return (
 		<ThemedView style={styles.container}>
-			<ThemedText style={styles.title}>Your habit history!</ThemedText>
+			<ThemedText style={styles.title}>{t("habit.history.heading")}</ThemedText>
 			{habits.length === 0 ? (
 				<ThemedText style={{ paddingHorizontal: 16 }}>
-					No habits found
+					{t("habit.history.empty")}
 				</ThemedText>
 			) : (
 				<View>
@@ -147,13 +148,13 @@ export default function TabTwoScreen() {
 			/>
 			<ConfirmationModal
 				visible={modalConfirmation}
-				title="Remove habit ?"
-				description="You can't restore it"
+				title={t("habit.history.deletTitle")}
+				description={t("habit.history.deleteDescription")}
 				onClose={() => setModalConfirmation(false)}
 				onConfirm={() => {
 					handleDelete();
 				}}
-				confirmText="Delete!"
+				confirmText={t("habit.history.deleteConfirm")}
 			/>
 		</ThemedView>
 	);
