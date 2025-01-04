@@ -30,9 +30,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build on EAS
-        run: |
-          if [[ "${{ github.event.inputs.platform }}" == "all" ]]; then
-            eas build --platform all --non-interactive --no-wait
-          else
-            eas build --platform ${{ github.event.inputs.platform }} --non-interactive --no-wait
+      - name: Build on EAS for Android
+        if: ${{ github.event.inputs.platform == 'android' }}
+        run: eas build --platform android --non-interactive --no-wait
+
+      - name: Build on EAS for iOS
+        if: ${{ github.event.inputs.platform == 'ios' }}
+        run: eas build --platform ios --non-interactive --no-wait
+
+      - name: Build on EAS for All
+        if: ${{ github.event.inputs.platform == 'all' }}
+        run: eas build --platform all --non-interactive --no-wait
